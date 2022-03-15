@@ -1,0 +1,48 @@
+.heading {
+    margin:auto;
+    width: 20%;
+    padding: 20px;
+
+}
+
+.mileage{
+    white-space: pre;
+    padding: 20px;
+}
+
+.vehicleInfo::before{
+    content: "\a";
+    white-space: pre;
+    padding: 20px;
+}
+
+.addB{
+    float: left;
+    position: absolute;
+    bottom: 10px;
+}
+
+.table{
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid black;
+    width: 100%;
+}
+
+.td{
+    border: 1px soild black;
+    padding: 10px;
+    width: 100%;
+}
+
+.th{
+    border: 1px soild black;
+    padding: 10px;
+    width: 100%;
+}
+
+.tr{
+    border: 1px soild black;
+    padding: 10px;
+    width: 100%;
+}
