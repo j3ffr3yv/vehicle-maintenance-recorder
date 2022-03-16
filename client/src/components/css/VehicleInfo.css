@@ -1,0 +1,8 @@
+.testCell {
+    width: 100%;
+    background-color: rgb(255,255,255);
+
+    border: solid;
+    border-width: 2px;
+    border-color: rgb(82,178,207);
+}
