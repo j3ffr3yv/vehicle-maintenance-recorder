@@ -1,7 +1,7 @@
 .heading {
     margin:auto;
-    width: 20%;
     padding: 20px;
+    text-align: center;
 
 }
 
@@ -22,3 +22,5 @@
 .ODO{
     width: 100%;
 }
+
+tr:hover {background-color: rgb(82,178,207)}

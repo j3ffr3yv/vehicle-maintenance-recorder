@@ -1,12 +1,15 @@
 import React from 'react';
 import '../css/NewPage.css';
+import IconButton from '@mui/material/IconButton';
+import AddSharpIcon from '@mui/icons-material/AddSharp';
+import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
 
 function NewPage() {
     return (
          <div>
-            <button class = "back">
-                Back
-            </button>
+            <IconButton aria-label="delete">
+                <ArrowBackIosNewSharpIcon />
+            </IconButton>
             <h1 class = "heading">VehicleID - Vehicle Info</h1>
             <label class = "ODO">ODO: 33,150</label>
             <table class = "table">
@@ -55,9 +58,9 @@ function NewPage() {
                 </tr>
                 </tbody>
             </table>
-            <button class = "addB">
-                ADD
-            </button>
+            <IconButton aria-label="delete">
+                <AddSharpIcon />
+            </IconButton>
          </div>
          
         
