@@ -14,7 +14,7 @@ function Login() {
     const [pur_date, setPur_date] = useState({name: ""})
     const [mileage, setMileage] = useState({name: ""})
         
-    const doSomething = () => {
+    const doSomething = (event) => {
         writeVehicleData(
             "6NMC791", 
             "CA", 
@@ -50,15 +50,28 @@ function Login() {
             "05/07/14",
             "128,565"
         )
+        if(license.name !== ""){
+            writeVehicleData(
+                license.name,
+                state.name,
+                "KMHCU5AE4EU158412",
+                "A081",
+                "2014",
+                "HYN",
+                "ACCENT",
+                "05/07/14",
+                "128,565"
+            )
+        }
     }
     
     return (
         <div className = "loginMenuParent">
-        <form onSubmit = {doSomething()}>
+        <form onsubmit = {doSomething()}>
             <TextField className = "loginTextField" name = "Email" variant = "filled" label = "Email Address" margin = "normal" InputLabel inputlabelprops = {{ shrink: true}} required value = {license.name} onChange = {(e) => setLicense({...license, name: e.target.value})}/>
-            <TextField className = "loginTextField" name = "Password" variant = "filled" label = "Password" margin = "normal" InputLabel inputlabelprops = {{ shrink: true}} required value = {license.name} onChange = {(e) => setLicense({...license, name: e.target.value})}/>
-        <Button type = "submit"> Submit! </Button>
+            <TextField className = "loginTextField" name = "Password" variant = "filled" label = "Password" margin = "normal" InputLabel inputlabelprops = {{ shrink: true}} required value = {state.name} onChange = {(f) => setState({...state, name: f.target.value})}/>
         </form>
+        <Button type = "submit"> Submit! </Button>
         </div>
     )
 }
