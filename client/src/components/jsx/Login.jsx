@@ -14,6 +14,21 @@ function Login() {
     const [pur_date, setPur_date] = useState({name: ""})
     const [mileage, setMileage] = useState({name: ""})
         
+    const writeVehicleData = (v_license, v_state, v_vin, v_twf, v_year, v_make, v_model, v_pur_date, v_mileage) => {
+        const db = getDatabase();
+        set(ref(db, 'vehicles/' + v_license), {
+        license: v_license, 
+        state: v_state,
+        vin: v_vin, 
+        twf: v_twf, 
+        year: v_year, 
+        make: v_make, 
+        model: v_model, 
+        pur_date: v_pur_date, 
+        mileage: v_mileage
+        });
+    }
+
     const doSomething = (event) => {
         writeVehicleData(
             "6NMC791", 
@@ -76,18 +91,4 @@ function Login() {
     )
 }
 
-function writeVehicleData(v_license, v_state, v_vin, v_twf, v_year, v_make, v_model, v_pur_date, v_mileage) {
-    const db = getDatabase();
-    set(ref(db, 'vehicles/' + v_license), {
-    license: v_license, 
-    state: v_state,
-    vin: v_vin, 
-    twf: v_twf, 
-    year: v_year, 
-    make: v_make, 
-    model: v_model, 
-    pur_date: v_pur_date, 
-    mileage: v_mileage
-    });
-  }
 export default Login;
