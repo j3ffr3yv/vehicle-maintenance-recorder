@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import '../css/Login.css';
 import {Container, AppBar, Typography, Grow, Grid, TextField, Button} from '@material-ui/core';
 import { getDatabase, ref, set } from "firebase/database";
+import useStyles from './styles';
+import { makeStyles } from '@material-ui/core/styles';
+import createPalette from '@material-ui/core/styles/createPalette';
 
 function Login() {
+
+    const classes = makeStyles;
+
     const [license, setLicense] = useState({name: ""})
     const [state, setState] = useState({name: ""})
     const [vin, setVin] = useState({name: ""})
@@ -30,6 +36,8 @@ function Login() {
     }
 
     const doSomething = (event) => {
+        event.preventDefault();
+        console.log("Starting");
         writeVehicleData(
             "6NMC791", 
             "CA", 
@@ -42,6 +50,7 @@ function Login() {
             "148,118"
         )
         
+        console.log("1");
         writeVehicleData(
             "6SBF037",
             "CA",
@@ -54,6 +63,7 @@ function Login() {
             "167,727"
         )
         
+        console.log("1");
         writeVehicleData(
             "7ESF548",
             "CA",
@@ -65,6 +75,7 @@ function Login() {
             "05/07/14",
             "128,565"
         )
+        console.log("3");
         if(license.name !== ""){
             writeVehicleData(
                 license.name,
@@ -81,13 +92,13 @@ function Login() {
     }
     
     return (
-        <div className = "loginMenuParent">
-        <form onsubmit = {doSomething()}>
-            <TextField className = "loginTextField" name = "Email" variant = "filled" label = "Email Address" margin = "normal" InputLabel inputlabelprops = {{ shrink: true}} required value = {license.name} onChange = {(e) => setLicense({...license, name: e.target.value})}/>
-            <TextField className = "loginTextField" name = "Password" variant = "filled" label = "Password" margin = "normal" InputLabel inputlabelprops = {{ shrink: true}} required value = {state.name} onChange = {(f) => setState({...state, name: f.target.value})}/>
-        </form>
-        <Button type = "submit"> Submit! </Button>
-        </div>
+        <form autoComplete='off' noValidate className = {`${classes.root} ${classes.form}`} onSubmit = {doSomething}>
+            <div className = "loginMenuParent">
+                <TextField className = "loginTextField" name = "Email" variant = "filled" label = "Email Address" margin = "normal" inputlabelprops = {{ shrink: true}} required value = {license.name} onChange = {(e) => setLicense({...license, name: e.target.value})}/>
+                <TextField className = "loginTextField" name = "Password" variant = "filled" label = "Password" margin = "normal" inputlabelprops = {{ shrink: true}} required value = {state.name} onChange = {(f) => setState({...state, name: f.target.value})}/>
+                <Button type = "submit"> Submit! </Button>                    
+            </div>
+        </form> 
     )
 }
 
