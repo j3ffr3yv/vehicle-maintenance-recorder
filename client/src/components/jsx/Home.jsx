@@ -37,11 +37,19 @@ function Home() {
     });
 
     const [editVehicleID, setEditVehicleID] = useState(null);
+    const [dependency, setDependency] = useState(true);
 
     useEffect(() => {
+        updateVehicles();
+    }, [])
+
+    
+
+    const updateVehicles = () =>
+    {
+        console.log("vehicles updated");
         const db = getDatabase();
         const starCountRef = ref(db, 'vehicles/');
-
         var newVehicles = [];
 
         onValue(starCountRef, (snapshot) => {
@@ -52,7 +60,7 @@ function Home() {
         });
 
         setVehicles(newVehicles); 
-    }, [vehicles])
+    }
     
     const writeVehicleData = (vehicle) => {
         const db = getDatabase();
@@ -191,7 +199,7 @@ function Home() {
             </form> 
             */}
 
-<div className = "addVehicle">
+        <div className = "addVehicle">
                 <h2>Add a Vehicle</h2>
                 <form onSubmit={handleAddVehicleSubmit}>
                     <input
@@ -287,23 +295,25 @@ function Home() {
                             </tr>
                         </thead>
                         <tbody>
-                            {vehicles.map((curVehicle) => (
-                            <Fragment>
-                                {editVehicleID === curVehicle.id ? (
-                                <EditableRow
-                                    editVehicleData={editVehicleData}
-                                    handleEditVehicleChange={handleEditVehicleChange}
-                                    handleCancelClick={handleCancelClick}
-                                />
-                                ) : (
-                                <ReadOnlyRow
-                                    vehicle={curVehicle}
-                                    handleEditClick={handleEditClick}
-                                    handleDeleteClick={handleDeleteClick}
-                                />
-                                )}
-                            </Fragment>
-                            ))}
+                            {vehicles.map((curVehicle) => {
+                                return (
+                                    <Fragment key = {curVehicle.id}>
+                                        {editVehicleID === curVehicle.id ? (
+                                        <EditableRow
+                                            editVehicleData={editVehicleData}
+                                            handleEditVehicleChange={handleEditVehicleChange}
+                                            handleCancelClick={handleCancelClick}
+                                        />
+                                        ) : (
+                                        <ReadOnlyRow
+                                            vehicle={curVehicle}
+                                            handleEditClick={handleEditClick}
+                                            handleDeleteClick={handleDeleteClick}
+                                        />
+                                        )}
+                                    </Fragment>
+                                )
+                            })}
                         </tbody>
                     </table>
                 </form>
