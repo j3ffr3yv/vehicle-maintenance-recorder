@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useState, Fragment, useEffect, useMemo} from 'react';
+import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TableCell from '@mui/material/TableCell';
@@ -22,6 +23,7 @@ import {
 import TableContainer from '../js/TableContainer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { SelectColumnFilter } from '../js/Filter.js';
+import { Link } from "react-router-dom";
 
 const Home = () => {
   //Vehicles
@@ -185,6 +187,11 @@ const Home = () => {
       remove(ref(db, 'vehicles/' + vehicle.twf));
       setVehicles(newVehicles);
   }
+  
+  function vehicleInfoPage(vehicleInfo) {
+    localStorage.setItem("loadedVehicle", JSON.stringify(vehicleInfo));
+    console.log("VEHICLE TO PAGE: " + localStorage.getItem("loadedVehicle"));
+  }
 
   const renderRowSubComponent = (row) => {
     const {
@@ -198,11 +205,24 @@ const Home = () => {
       pur_date,
       mileage
     } = row.original;
+
     return (
       <Card style={{ width: '18rem', margin: '0 auto' }}>
         <CardBody>
           <CardTitle>
-            <strong>{`${make} ${model}`} </strong>
+            <Link to={"/newpage"} onClick = {() => vehicleInfoPage(
+              {
+                licenseP: license, 
+                stateP: state, 
+                vinP: vin, 
+                twfP: twf, 
+                yearP: year, 
+                makeP: make, 
+                modelP: model, 
+                pur_dateP: pur_date, 
+                mileageP: mileage
+              })}>{make} {model}</Link>
+            {/*<strong>`${make} ${model}` </strong>*/}
           </CardTitle>
           <CardText>
             <strong>Phone</strong>: {pur_date} <br />

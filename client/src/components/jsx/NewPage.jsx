@@ -1,18 +1,35 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../css/NewPage.css';
 import IconButton from '@mui/material/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
+import { useParams } from "react-router";
 
 function NewPage() {
+
+    const vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
+    console.log("ON VEHICLE PAGE: " + vehicleData.licenseP);
+
     return (
          <div>
-            <IconButton aria-label="delete">
+            <IconButton aria-label="delete"> 
                 <ArrowBackIosNewSharpIcon />
             </IconButton>
-            <h1 class = "heading">VehicleID - Vehicle Info</h1>
-            <label class = "ODO">ODO: 33,150</label>
-            <table class = "table">
+
+            <h1>Vehicle Data: {vehicleData.stateP}</h1>
+
+            <div className = "vehicleDataList">
+                <div>State: {vehicleData.licenseP}</div>
+                <div>VIN: {vehicleData.vinP}</div>
+                <div>TWF: {vehicleData.twfP}</div>
+                <div>Year: {vehicleData.yearP}</div>
+                <div>Make: {vehicleData.makeP}</div>
+                <div>Model: {vehicleData.modelP}</div>
+                <div>Purchase Date: {vehicleData.pur_dateP}</div>
+            </div>
+
+            <h1>Maintenance Performed</h1>
+            <table className = "table">
                 <thead>
                 <tr>
                     <th>Date</th>

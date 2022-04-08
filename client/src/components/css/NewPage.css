@@ -23,4 +23,14 @@
     width: 100%;
 }
 
+
+.vehicleDataList {
+    font-size: 25px;
+    display: block;
+    color: white;
+    background-color: rgb(82,178,207);
+    width: 30%;
+    padding: 10px;
+}
+
 tr:hover {background-color: rgb(82,178,207)}
