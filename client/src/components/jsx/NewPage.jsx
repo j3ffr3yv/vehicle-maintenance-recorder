@@ -62,7 +62,7 @@ function NewPage() {
           name: maintenance.name,
           date: maintenance.date,
           mechanic: maintenance.mechanic,
-          parts_cost: maintenance.cost,
+          parts_cost: maintenance.parts_cost,
           labor: maintenance.labor,
           notes: maintenance.notes
         });
@@ -85,10 +85,11 @@ function NewPage() {
             name: addMaintenanceData.name,
             date: Date.now(),
             mechanic: addMaintenanceData.mechanic,
-            parts_cost: addMaintenanceData.cost,
+            parts_cost: addMaintenanceData.parts_cost,
             labor: addMaintenanceData.labor,
             notes: addMaintenanceData.notes
         }
+        console.log(newMaintenance);
     
       writeMaintenanceData(newMaintenance);
       const newMaintenances = [...maintenances, newMaintenance];
