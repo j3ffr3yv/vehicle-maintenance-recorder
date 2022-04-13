@@ -4,11 +4,35 @@ import IconButton from '@mui/material/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
 import { useParams } from "react-router";
+import { getDatabase, onValue , ref, set } from 'firebase/database';
+import { useState } from 'react';
 
 function NewPage() {
 
     const vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
     console.log("ON VEHICLE PAGE: " + vehicleData.licenseP);
+    const [maintenances, setMaintenances] = useState([]);
+    
+    const maintenance = () =>
+    {
+        const db = getDatabase();
+        const Ref = ref(db, 'maintenances/v1');
+        var newMaintenances = [];
+    
+        onValue(Ref, (snapshot) => {
+            const data = snapshot.val();
+            Object.values(data).map((curMaintanences, k) => {
+                newMaintenances.push(curMaintanences);
+            })
+        });
+
+        setMaintenances(newMaintenances);
+        //console.log(newMaintenances[0].date);
+    }
+
+    useEffect(() => {
+        maintenance();
+    },[])
 
     return (
          <div>
@@ -39,7 +63,7 @@ function NewPage() {
                 </thead>
                 <tbody>
                 <tr>
-                    <td>1/15/2022</td>
+                    <td>{console.log(maintenances)}</td>
                     <td>Oil Service</td>
                     <td>33,150</td>
                 </tr>
@@ -84,5 +108,6 @@ function NewPage() {
         
     )
 }
+
 
 export default NewPage;
