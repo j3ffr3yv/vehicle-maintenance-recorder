@@ -1,19 +1,51 @@
-import React, {useState, Fragment, useEffect, useMemo} from 'react';
+import React, {useState, Fragment, useEffect, useMemo, useReducer} from 'react';
 import '../css/NewPage.css';
 import IconButton from '@mui/material/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
 import { useParams } from "react-router";
+
 import { getDatabase, ref, remove, set, onValue } from "firebase/database";
 import { nanoid } from "nanoid";
+
 
 function NewPage() {
 
     const vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
-    console.log("ON VEHICLE PAGE: " + vehicleData.licenseP);
+    const [maintenances, setMaintenances] = useState([]);
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
+    
+    const maintenance = () =>
+    {
+        const db = getDatabase();
+        const Ref = ref(db, 'maintenances/v1');
+        var newMaintenances = [];
+    
+        onValue(Ref, (snapshot) => {
+            const data = snapshot.val();
+            Object.values(data).map((curMaintanences, k) => {
+                displayMaintenances.push(curMaintanences);
+                /*console.log(maintenances);*/
+                forceUpdate();
+            })
+            /*console.log("NEWMAINTENANCES: " + newMaintenances);*/
+            /*setMaintenances(newMaintenances);*/
+            /*setMaintenances({...maintenances, newMaintenances})*/
+        });
+
+        //console.log(newMaintenances[0].date);
+    }
+
+    useEffect(() => {
+        if (maintenances.length == 0)
+        {
+            maintenance();
+        }
+    },[])
 
     //Vehicles
-    const [maintenances, setMaintenances] = useState([]);
+    const [displayMaintenances, setDisplayMaintenances] = useState([]);
     //AddVehicleData
     const [addMaintenanceData, setAddMaintenanceData] = useState({
         id: "",
@@ -115,7 +147,7 @@ function NewPage() {
                     className = "inputAdd"
                     type="text"
                     name="mechanic"
-                    defaultvalue=""
+                    defaultValue=""
                     placeholder="Mechanic: "
                     onChange={handleAddMaintenanceChange}
                     />
@@ -169,41 +201,15 @@ function NewPage() {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1/15/2022</td>
-                    <td>Oil Service</td>
-                    <td>33,150</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Front Brakes</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Rotate Tires</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Replace Cabin Air Filter</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Oil Service</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>8/10/2021</td>
-                    <td>Front Brakes</td>
-                    <td>18,600</td>
-                </tr>
-                <tr>
-                    <td>8/10/2021</td>
-                    <td>Oil Service</td>
-                    <td>18,600</td>
-                </tr>
+                    {displayMaintenances.map((currMaint, index) => {
+                        return (
+                            <tr key = {index}>
+                                <td>{currMaint.date}</td>
+                                <td>{currMaint.service}</td>
+                                <td>{currMaint.mileage}</td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
             <IconButton aria-label="delete">
@@ -215,5 +221,6 @@ function NewPage() {
         
     )
 }
+
 
 export default NewPage;
