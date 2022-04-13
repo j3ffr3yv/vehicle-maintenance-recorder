@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import '../css/NewPage.css';
 import IconButton from '@mui/material/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
@@ -10,8 +10,9 @@ import { useState } from 'react';
 function NewPage() {
 
     const vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
-    console.log("ON VEHICLE PAGE: " + vehicleData.licenseP);
     const [maintenances, setMaintenances] = useState([]);
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
     
     const maintenance = () =>
     {
@@ -22,16 +23,23 @@ function NewPage() {
         onValue(Ref, (snapshot) => {
             const data = snapshot.val();
             Object.values(data).map((curMaintanences, k) => {
-                newMaintenances.push(curMaintanences);
+                maintenances.push(curMaintanences);
+                /*console.log(maintenances);*/
+                forceUpdate();
             })
+            /*console.log("NEWMAINTENANCES: " + newMaintenances);*/
+            /*setMaintenances(newMaintenances);*/
+            /*setMaintenances({...maintenances, newMaintenances})*/
         });
 
-        setMaintenances(newMaintenances);
         //console.log(newMaintenances[0].date);
     }
 
     useEffect(() => {
-        maintenance();
+        if (maintenances.length == 0)
+        {
+            maintenance();
+        }
     },[])
 
     return (
@@ -62,41 +70,15 @@ function NewPage() {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>{console.log(maintenances)}</td>
-                    <td>Oil Service</td>
-                    <td>33,150</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Front Brakes</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Rotate Tires</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Replace Cabin Air Filter</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>11/20/2021</td>
-                    <td>Oil Service</td>
-                    <td>26,900</td>
-                </tr>
-                <tr>
-                    <td>8/10/2021</td>
-                    <td>Front Brakes</td>
-                    <td>18,600</td>
-                </tr>
-                <tr>
-                    <td>8/10/2021</td>
-                    <td>Oil Service</td>
-                    <td>18,600</td>
-                </tr>
+                    {maintenances.map((currMaint, index) => {
+                        return (
+                            <tr key = {index}>
+                                <td>{currMaint.date}</td>
+                                <td>{currMaint.service}</td>
+                                <td>{currMaint.mileage}</td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
             <IconButton aria-label="delete">
