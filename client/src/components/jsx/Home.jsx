@@ -24,6 +24,7 @@ import TableContainer from '../js/TableContainer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { SelectColumnFilter } from '../js/Filter.js';
 import { Link } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 const Home = () => {
   //Vehicles
@@ -78,7 +79,8 @@ const Home = () => {
   }
   const writeVehicleData = (vehicle) => {
       const db = getDatabase();
-      set(ref(db, 'vehicles/' + vehicle.twf), {
+      set(ref(db, 'vehicles/' + vehicle.id), {
+        id: vehicle.id,
         license: vehicle.license, 
         state: vehicle.state,
         vin: vehicle.vin, 
@@ -101,6 +103,26 @@ const Home = () => {
 
       setAddVehicleData(newVehicleData);
   }
+  const handleAddVehicleSubmit = (event) => {
+    event.preventDefault();
+
+    const newVehicle = {
+        id: nanoid(),
+        license: addVehicleData.license, 
+        state: addVehicleData.state,
+        vin: addVehicleData.vin, 
+        twf: addVehicleData.twf, 
+        year: addVehicleData.year, 
+        make: addVehicleData.make, 
+        model: addVehicleData.model, 
+        pur_date: addVehicleData.pur_date, 
+        mileage: addVehicleData.mileage
+    }
+
+    writeVehicleData(newVehicle);
+    const newVehicles = [...vehicles, newVehicle];
+    setVehicles(newVehicles);
+  }
   const handleEditVehicleChange = (event) => {
       event.preventDefault();
 
@@ -112,30 +134,12 @@ const Home = () => {
 
       setEditVehicleData(newVehicleData);
   }
-  const handleAddVehicleSubmit = (event) => {
-      event.preventDefault();
-
-      const newVehicle = {
-          license: addVehicleData.license, 
-          state: addVehicleData.state,
-          vin: addVehicleData.vin, 
-          twf: addVehicleData.twf, 
-          year: addVehicleData.year, 
-          make: addVehicleData.make, 
-          model: addVehicleData.model, 
-          pur_date: addVehicleData.pur_date, 
-          mileage: addVehicleData.mileage
-      }
-
-      writeVehicleData(newVehicle);
-      const newVehicles = [...vehicles, newVehicle];
-      setVehicles(newVehicles);
-  }
   const handleEditVehicleSubmit = (event) => {
       const db = getDatabase();
       event.preventDefault();
 
       const editedVehicle = {
+          id: editVehicleID,
           license: editVehicleData.license, 
           state: editVehicleData.state,
           vin: editVehicleData.vin, 
@@ -195,6 +199,7 @@ const Home = () => {
 
   const renderRowSubComponent = (row) => {
     const {
+      id,
       license,
       state,
       vin,
@@ -212,6 +217,7 @@ const Home = () => {
           <CardTitle>
             <Link to={"/newpage"} onClick = {() => vehicleInfoPage(
               {
+                idP: id,
                 licenseP: license, 
                 stateP: state, 
                 vinP: vin, 
@@ -297,7 +303,7 @@ const Home = () => {
                     type="text"
                     name="license"
                     required="required"
-                    placeholder="State: "
+                    placeholder="License: "
                     onChange={handleAddVehicleChange}
                     />
                     <input
@@ -305,7 +311,7 @@ const Home = () => {
                     type="text"
                     name="state"
                     required="required"
-                    placeholder="License: "
+                    placeholder="State: "
                     onChange={handleAddVehicleChange}
                     />
                     <input
