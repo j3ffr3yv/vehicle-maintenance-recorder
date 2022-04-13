@@ -19,14 +19,14 @@ function NewPage() {
     const maintenance = () =>
     {
         const db = getDatabase();
-        const Ref = ref(db, 'maintenances/v1');
+        const Ref = ref(db, 'vehicles/'+ vehicleData.idP + '/maintenances');
         var newMaintenances = [];
     
         onValue(Ref, (snapshot) => {
             const data = snapshot.val();
             Object.values(data).map((curMaintanences, k) => {
                 displayMaintenances.push(curMaintanences);
-                /*console.log(maintenances);*/
+                
                 forceUpdate();
             })
             /*console.log("NEWMAINTENANCES: " + newMaintenances);*/
@@ -191,30 +191,33 @@ function NewPage() {
                 <div>Purchase Date: {vehicleData.pur_dateP}</div>
             </div>
 
-            <h1>Maintenance Performed</h1>
+            <h1 className = "maintenancePerformed">Maintenance Performed</h1>
             <table className = "table">
                 <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Comment</th>
-                    <th>Mileage</th>
+                    <th>Service</th>
+                    <th>Mechanic</th>
+                    <th>Parts Cost</th>
+                    <th>Labor Cost</th>
+                    <th>Notes</th>
                 </tr>
                 </thead>
                 <tbody>
                     {displayMaintenances.map((currMaint, index) => {
                         return (
                             <tr key = {index}>
-                                <td>{currMaint.date}</td>
-                                <td>{currMaint.service}</td>
-                                <td>{currMaint.mileage}</td>
+                                <td>{Date(currMaint.date)}</td>
+                                <td>{currMaint.name}</td>
+                                <td>{currMaint.mechanic}</td>
+                                <td>{currMaint.parts_cost}</td>
+                                <td>{currMaint.labor}</td>
+                                <td>{currMaint.notes}</td>
                             </tr>
                         )
                     })}
                 </tbody>
             </table>
-            <IconButton aria-label="delete">
-                <AddSharpIcon />
-            </IconButton>
          </div>
          
         

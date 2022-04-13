@@ -33,4 +33,10 @@
     padding: 10px;
 }
 
+.maintenancePerformed{
+    margin:auto;
+    padding: 20px;
+    text-align: center;
+}
+
 tr:hover {background-color: rgb(82,178,207)}
