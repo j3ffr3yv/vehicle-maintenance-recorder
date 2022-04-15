@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, Fragment, useEffect, useMemo} from 'react';
+import {useState, Fragment, useEffect, useMemo, useReducer} from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
@@ -27,6 +27,9 @@ import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
 
 const Home = () => {
+
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
   //Vehicles
   const [vehicles, setVehicles] = useState([]);
   //AddVehicleData
@@ -73,9 +76,8 @@ const Home = () => {
           Object.values(data).map((curVehicle, k) => {
               newVehicles.push(curVehicle);
           })
+          setVehicles(newVehicles); 
       });
-
-      setVehicles(newVehicles); 
   }
   const writeVehicleData = (vehicle) => {
       const db = getDatabase();
@@ -295,6 +297,7 @@ const Home = () => {
 
   return (
     <Container style={{ marginTop: 0 }}>
+      {console.log("Rendering")}
       <div className = "addVehicle">
                 <h2>Add a Vehicle</h2>
                 <form onSubmit={handleAddVehicleSubmit}>
