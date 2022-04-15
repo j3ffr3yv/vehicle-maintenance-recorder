@@ -9,8 +9,7 @@ function NavBar(){
             <img className='logoImage' src={require("../../Images/Logo.png")}/>
             <div className='navButtons'>
                 <NavLink className='NavBarText' to="/login">Login</NavLink>
-                <NavLink className='NavBarText' to="/">Home</NavLink> 
-                <NavLink className='NavBarText' to="/newpage">NewPage</NavLink>             
+                <NavLink className='NavBarText' to="/">Home</NavLink>           
             </div>              
         </div>          
     )
