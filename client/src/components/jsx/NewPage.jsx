@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 import { getDatabase, ref, remove, set, onValue } from "firebase/database";
 import { nanoid } from "nanoid";
@@ -127,6 +128,12 @@ function NewPage() {
       const newMaintenances = [...maintenances, newMaintenance];
       setMaintenances(newMaintenances);
     }
+
+    function handleMaintenancePage(maintenance) {
+        localStorage.setItem("loadedMaintenance", JSON.stringify(maintenance))
+        console.log("MAINTENANCE TO PAGE: " + localStorage.getItem("loadedMaintenance"));
+    }
+
     return (
          <div>
             <IconButton aria-label="delete"> 
@@ -207,7 +214,19 @@ function NewPage() {
                     {displayMaintenances.map((currMaint, index) => {
                         return (
                             <tr key = {index}>
-                                <td>{Date(currMaint.date)}</td>
+                                <td>
+                                    <Link to = "/maintenance" onClick = {() => handleMaintenancePage(
+                                        {
+                                            id: currMaint.id,
+                                            name: currMaint.name,
+                                            date: currMaint.date,
+                                            mechanic: currMaint.mechanic,
+                                            parts_cost: currMaint.parts_cost,
+                                            labor: currMaint.labor,
+                                            notes: currMaint.notes
+                                        }
+                                    )}>{Date(currMaint.date)}</Link>
+                                </td>
                                 <td>{currMaint.name}</td>
                                 <td>{currMaint.mechanic}</td>
                                 <td>{currMaint.parts_cost}</td>
