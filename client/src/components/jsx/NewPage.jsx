@@ -204,10 +204,7 @@ function NewPage() {
                 <tr>
                     <th>Date</th>
                     <th>Service</th>
-                    <th>Mechanic</th>
-                    <th>Parts Cost</th>
-                    <th>Labor Cost</th>
-                    <th>Notes</th>
+                    <th>Mileage</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -228,16 +225,17 @@ function NewPage() {
                                     )}>{Date(currMaint.date)}</Link>
                                 </td>
                                 <td>{currMaint.name}</td>
-                                <td>{currMaint.mechanic}</td>
-                                <td>{currMaint.parts_cost}</td>
-                                <td>{currMaint.labor}</td>
-                                <td>{currMaint.notes}</td>
+                                <td> #########</td>
                             </tr>
                         )
                     })}
                 </tbody>
             </table>
+            <IconButton aria-label="delete"> 
+         <AddSharpIcon />
+     </IconButton>
          </div>
+         
          
         
         

@@ -6,6 +6,8 @@ import NavBar from './components/jsx/NavBar.jsx';
 import Login from './components/jsx/Login.jsx';
 import NewPage from './components/jsx/NewPage.jsx';
 import MaintenancePage from './components/jsx/MaintenancePage.jsx'
+import SignUp from './components/jsx/SignUp.jsx';
+
 
 import './components/css/NavBar.css';
 
@@ -59,6 +61,7 @@ const App = () => {
                     <Route path ="/login" element = {<Login/>} />
                     <Route path ="/newpage" element = {<NewPage/>} />
                     <Route path ="/maintenance" element = {<MaintenancePage/>} />
+                    <Route path ="/signup" element = {<SignUp/>} />
                 </Routes>   
         </Router>
     );
