@@ -25,9 +25,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { SelectColumnFilter } from '../js/Filter.js';
 import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
+import { getAuth } from "firebase/auth"
 
 const Home = () => {
 
+  const auth = getAuth();
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   //Vehicles
@@ -295,93 +297,101 @@ const Home = () => {
     []
   );
 
+  console.log(auth.currentUser);
   return (
-    <Container style={{ marginTop: 0 }}>
-      {console.log("Rendering")}
-      <div className = "addVehicle">
-                <h2>Add a Vehicle</h2>
-                <form onSubmit={handleAddVehicleSubmit}>
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="license"
-                    required="required"
-                    placeholder="License: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="state"
-                    required="required"
-                    placeholder="State: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="vin"
-                    required="required"
-                    placeholder="Vin: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="twf"
-                    required="required"
-                    placeholder="Twf: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="year"
-                    required="required"
-                    placeholder="Year: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="make"
-                    required="required"
-                    placeholder="Make: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="model"
-                    required="required"
-                    placeholder="Model: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    type="text"
-                    className = "inputAdd"
-                    name="pur_date"
-                    required="required"
-                    placeholder="Pur_date: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    type="text"
-                    className = "inputAdd"
-                    name="mileage"
-                    required="required"
-                    placeholder="Mileage: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <button type="submit">Add</button>
-                </form>
-            </div>
-      <TableContainer
-        columns={columns}
-        data={vehicles}
-        renderRowSubComponent={renderRowSubComponent}
-      />
-    </Container>
+    <div>
+      {
+        auth.currentUser != null ?
+          <Container style={{ marginTop: 0 }}>
+          {console.log("Rendering")}
+          <div className = "addVehicle">
+              <h2>Add a Vehicle</h2>
+              <form onSubmit={handleAddVehicleSubmit}>
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="license"
+                  required="required"
+                  placeholder="License: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="state"
+                  required="required"
+                  placeholder="State: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="vin"
+                  required="required"
+                  placeholder="Vin: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="twf"
+                  required="required"
+                  placeholder="Twf: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="year"
+                  required="required"
+                  placeholder="Year: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="make"
+                  required="required"
+                  placeholder="Make: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="model"
+                  required="required"
+                  placeholder="Model: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  type="text"
+                  className = "inputAdd"
+                  name="pur_date"
+                  required="required"
+                  placeholder="Pur_date: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  type="text"
+                  className = "inputAdd"
+                  name="mileage"
+                  required="required"
+                  placeholder="Mileage: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <button type="submit">Add</button>
+              </form>
+          </div>
+          <TableContainer
+          columns={columns}
+          data={vehicles}
+          renderRowSubComponent={renderRowSubComponent}
+          />
+          </Container>
+        :
+          <h1>Please log in in order to view this information!</h1>
+      }
+    </div>
   );
 };
 
