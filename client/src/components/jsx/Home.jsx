@@ -304,7 +304,7 @@ const Home = () => {
         auth.currentUser != null ?
           <Container style={{ marginTop: 0 }}>
           {console.log("Rendering")}
-          <div className = "addVehicle">
+          <div>
               <h2>Add a Vehicle</h2>
               <form onSubmit={handleAddVehicleSubmit}>
                   <input
