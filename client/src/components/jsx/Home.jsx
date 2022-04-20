@@ -1,15 +1,5 @@
 import * as React from 'react';
 import {useState, Fragment, useEffect, useMemo, useReducer} from 'react';
-import ReactDOM from "react-dom";
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { visuallyHidden } from '@mui/utils';
-import Input from "@material-ui/core/Input";
-import { makeStyles } from '@material-ui/core/styles';
 import "../css/Home.css"
 import { getDatabase, ref, remove, set, onValue } from "firebase/database";
 import {
@@ -216,10 +206,10 @@ const Home = () => {
     } = row.original;
 
     return (
-      <Card style={{ width: '18rem', margin: '0 auto' }}>
+      <Card style={{ width: '30rem', width: "30vw", margin: '0 auto' }}>
         <CardBody>
           <CardTitle>
-            <Link to={"/newpage"} onClick = {() => vehicleInfoPage(
+          <strong>To Vehicle Page&rarr;</strong> <Link to={"/VehiclePage"} onClick = {() => vehicleInfoPage(
               {
                 idP: id,
                 licenseP: license, 
@@ -231,13 +221,20 @@ const Home = () => {
                 modelP: model, 
                 pur_dateP: pur_date, 
                 mileageP: mileage
-              })}>{make} {model}</Link>
+              })}>{twf} {year} {make} {model}</Link>
             {/*<strong>`${make} ${model}` </strong>*/}
           </CardTitle>
           <CardText>
-            <strong>Phone</strong>: {pur_date} <br />
-            <strong>Address:</strong>{' '}
-            {`${license} ${state} - ${vin} - ${twf}`}
+            <strong>License:</strong> {license} <br />
+            <strong>State:</strong> {state} <br />
+            <strong>VIN:</strong> {vin} <br />
+            <strong>TWF:</strong> {twf} <br />
+            <strong>Year:</strong> {year} <br />
+            <strong>Make:</strong> {make} <br />
+            <strong>Model:</strong> {model} <br />
+            <strong>Pur_Date:</strong> {pur_date} <br />
+            <strong>Mileage:</strong> {' '}
+            {`${mileage}`}
           </CardText>
         </CardBody>
       </Card>
@@ -256,20 +253,6 @@ const Home = () => {
         ),
       },
       {
-        Header: 'LICENSE',
-        accessor: 'license',
-        Filter: SelectColumnFilter,
-        filter: 'equals',
-      },
-      {
-        Header: 'STATE',
-        accessor: 'state',
-      },
-      {
-        Header: 'VIN',
-        accessor: 'vin',
-      },
-      {
         Header: 'TWF',
         accessor: 'twf',
       },
@@ -284,14 +267,6 @@ const Home = () => {
       {
         Header: 'MODEL',
         accessor: 'model',
-      },
-      {
-        Header: 'PUR_DATE',
-        accessor: 'pur_date',
-      },
-      {
-        Header: 'MILEAGE',
-        accessor: 'mileage',
       },
     ],
     []

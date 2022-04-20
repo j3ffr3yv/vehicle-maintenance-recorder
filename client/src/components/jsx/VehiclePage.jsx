@@ -1,5 +1,5 @@
 import React, {useState, Fragment, useEffect, useMemo, useReducer} from 'react';
-import '../css/NewPage.css';
+import '../css/VehiclePage.css';
 import IconButton from '@mui/material/IconButton';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
@@ -11,7 +11,7 @@ import { nanoid } from "nanoid";
 import { getAuth } from "firebase/auth"
 
 
-function NewPage() {
+function VehiclePage() {
 
     const auth = getAuth();
     const vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
@@ -193,7 +193,6 @@ function NewPage() {
                         <h1>Vehicle Data: {vehicleData.stateP}</h1>
 
                         <div className = "vehicleDataList">
-                            <div>(FOR DEBUGGING) id: {vehicleData.idP}</div>
                             <div>State: {vehicleData.licenseP}</div>
                             <div>VIN: {vehicleData.vinP}</div>
                             <div>TWF: {vehicleData.twfP}</div>
@@ -248,4 +247,4 @@ function NewPage() {
 }
 
 
-export default NewPage;
+export default VehiclePage;
