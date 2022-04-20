@@ -176,14 +176,17 @@ const Home = () => {
       setEditVehicleID(null);
   }
   const handleDeleteClick = (vehicle) => {
-      const db = getDatabase();
-      const newVehicles = [...vehicles];
+    console.log("DELETE");
+    const db = getDatabase();
+    const newVehicles = [...vehicles];
 
-      const index = vehicles.findIndex((vehicleI) => vehicleI.twf = vehicle.twf);
-      newVehicles.splice(index, 1);
+    const index = vehicles.findIndex((vehicleI) => vehicleI.twf = vehicle.twf);
+    newVehicles.splice(index, 1);
 
-      remove(ref(db, 'vehicles/' + vehicle.twf));
-      setVehicles(newVehicles);
+    remove(ref(db, 'vehicles/' + vehicle.twf));
+    setVehicles(newVehicles);
+    localStorage.setItem("loadedVehicle", null);
+    window.location.href = '/'
   }
   
   function vehicleInfoPage(vehicleInfo) {

@@ -14,9 +14,16 @@ import { getAuth } from "firebase/auth"
 function VehiclePage() {
 
     const auth = getAuth();
-    const vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
+    let vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
     const [maintenances, setMaintenances] = useState([]);
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
+    useEffect(() => {
+        if (vehicleData == null)
+        {
+            window.location.href = '/'
+        }
+    })
 
     
     const maintenance = () =>
@@ -136,14 +143,27 @@ function VehiclePage() {
         console.log("MAINTENANCE TO PAGE: " + localStorage.getItem("loadedMaintenance"));
     }
 
+    function handleDeleteVehicle() {
+        console.log("DELETING " + vehicleData.idP)
+        const db = getDatabase();
+        remove(ref(db, 'vehicles/' + vehicleData.idP));
+        localStorage.setItem("loadedVehicle", null);
+        vehicleData = null;
+        window.location.href = '/'
+       // window.location.reload(false);
+    }
+
     return (
          <div>
             {
-                auth.currentUser != null ?
+                auth.currentUser != null && vehicleData != null ?
                     <div>
                         <Link to="/"> 
                             <ArrowBackIosNewSharpIcon />
                         </Link>
+                        <button onClick={handleDeleteVehicle}>
+                            Delete
+                        </button>
 
                         <h1>Vehicle Data: {vehicleData.stateP}</h1>
 
