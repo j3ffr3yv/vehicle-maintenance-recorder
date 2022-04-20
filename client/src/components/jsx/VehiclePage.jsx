@@ -141,9 +141,22 @@ function VehiclePage() {
             {
                 auth.currentUser != null ?
                     <div>
-                        <IconButton aria-label="delete"> 
+                        <Link to="/"> 
                             <ArrowBackIosNewSharpIcon />
-                        </IconButton>
+                        </Link>
+
+                        <h1>Vehicle Data: {vehicleData.stateP}</h1>
+
+                        <div className = "vehicleDataList">
+                            <div>State: {vehicleData.licenseP}</div>
+                            <div>VIN: {vehicleData.vinP}</div>
+                            <div>TWF: {vehicleData.twfP}</div>
+                            <div>Year: {vehicleData.yearP}</div>
+                            <div>Make: {vehicleData.makeP}</div>
+                            <div>Model: {vehicleData.modelP}</div>
+                            <div>Purchase Date: {vehicleData.pur_dateP}</div>
+                        </div>
+
                         <div className = "addMaintenance">
                             <h2>Add Maintenance</h2>
                             <form onSubmit={handleAddMaintenanceSubmit}>
@@ -190,18 +203,7 @@ function VehiclePage() {
                                 <button type="submit">Add</button>
                             </form>
                         </div>
-                        <h1>Vehicle Data: {vehicleData.stateP}</h1>
-
-                        <div className = "vehicleDataList">
-                            <div>State: {vehicleData.licenseP}</div>
-                            <div>VIN: {vehicleData.vinP}</div>
-                            <div>TWF: {vehicleData.twfP}</div>
-                            <div>Year: {vehicleData.yearP}</div>
-                            <div>Make: {vehicleData.makeP}</div>
-                            <div>Model: {vehicleData.modelP}</div>
-                            <div>Purchase Date: {vehicleData.pur_dateP}</div>
-                        </div>
-
+                
                         <h1 className = "maintenancePerformed">Maintenance Performed</h1>
                         <table className = "table">
                             <thead>

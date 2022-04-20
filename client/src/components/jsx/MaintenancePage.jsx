@@ -1,5 +1,7 @@
 import React from "react";
 import { getAuth } from "firebase/auth"
+import { Link } from "react-router-dom";
+import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
 
 const MaintenancePage = () => {
 
@@ -8,6 +10,9 @@ const MaintenancePage = () => {
 
     return (
         <div>
+            <Link to="/vehiclepage"> 
+                <ArrowBackIosNewSharpIcon />
+            </Link>
             { 
                 auth.currentUser != null ?
                     <div>

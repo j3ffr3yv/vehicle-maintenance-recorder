@@ -39,4 +39,8 @@
     text-align: center;
 }
 
+.addMaintenance{
+    margin-top: 50px;
+}
+
 tr:hover {background-color: rgb(82,178,207)}
