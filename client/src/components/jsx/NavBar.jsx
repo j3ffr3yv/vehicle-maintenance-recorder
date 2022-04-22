@@ -1,12 +1,26 @@
-import React from 'react';
+import React , {useReducer}from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 
 import "../css/NavBar.css";
-import { getAuth } from "firebase/auth"
+import {getAuth,signOut } from "firebase/auth"
 
 function NavBar(){
-
+ 
     const auth = getAuth();
+
+    useReducer(x => x + 1, 0);
+
+    function LogOut()
+    {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            console.log("This signs out the user")
+            console.log(auth)
+          }).catch((error) => {
+            // An error happened.
+          });
+    }
+
 
     return (
         <div className = 'mainNavBarContent'>
@@ -14,9 +28,9 @@ function NavBar(){
             <div className='navButtons'>
                 {
                     auth.currentUser != null ? 
-                        <NavLink className='NavBarText' to="/login">Login</NavLink>
+                        <button onClick={LogOut}>Sign out</button>
                     :
-                        <p className='NavBarText'>logout</p>
+                        <NavLink className='NavBarText' to="/login">Login</NavLink>
                 }
                 <NavLink className='NavBarText' to="/">Home</NavLink>           
             </div>              
