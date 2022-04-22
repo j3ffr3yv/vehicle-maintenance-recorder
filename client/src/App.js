@@ -55,7 +55,7 @@ function writeUserData(userId, name, email, imageUrl) {
 const App = () => {
     return (
         <Router>
-                <NavBar/>
+                
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path ="/login" element = {<Login/>} />
