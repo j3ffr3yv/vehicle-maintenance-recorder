@@ -2,6 +2,7 @@ import React from "react";
 import { getAuth } from "firebase/auth"
 import { Link } from "react-router-dom";
 import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
+import NavBar from "./NavBar"
 
 const MaintenancePage = () => {
 
@@ -10,6 +11,7 @@ const MaintenancePage = () => {
 
     return (
         <div>
+            <NavBar/>
             <Link to="/vehiclepage"> 
                 <ArrowBackIosNewSharpIcon />
             </Link>

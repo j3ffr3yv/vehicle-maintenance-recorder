@@ -1,4 +1,4 @@
-import React , {useReducer}from 'react';
+import React , {useEffect, useReducer}from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 
 import "../css/NavBar.css";
@@ -6,7 +6,7 @@ import {getAuth,signOut } from "firebase/auth"
 
 function NavBar(){
  
-    const auth = getAuth();
+    let auth = getAuth();
 
     useReducer(x => x + 1, 0);
 
@@ -16,12 +16,14 @@ function NavBar(){
             // Sign-out successful.
             console.log("This signs out the user")
             console.log(auth)
+            window.location.reload(false);
           }).catch((error) => {
             // An error happened.
           });
+          
     }
 
-
+    console.log(auth.currentUser);
     return (
         <div className = 'mainNavBarContent'>
             <img className='logoImage' src={require("../../Images/Logo.png")}/>

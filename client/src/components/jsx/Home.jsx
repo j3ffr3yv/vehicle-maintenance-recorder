@@ -16,6 +16,7 @@ import { SelectColumnFilter } from '../js/Filter.js';
 import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { getAuth } from "firebase/auth"
+import NavBar from "./NavBar"
 
 const Home = () => {
 
@@ -209,38 +210,40 @@ const Home = () => {
     } = row.original;
 
     return (
-      <Card style={{ width: '30rem', width: "30vw", margin: '0 auto' }}>
-        <CardBody>
-          <CardTitle>
-          <strong>To Vehicle Page&rarr;</strong> <Link to={"/VehiclePage"} onClick = {() => vehicleInfoPage(
-              {
-                idP: id,
-                licenseP: license, 
-                stateP: state, 
-                vinP: vin, 
-                twfP: twf, 
-                yearP: year, 
-                makeP: make, 
-                modelP: model, 
-                pur_dateP: pur_date, 
-                mileageP: mileage
-              })}>{twf} {year} {make} {model}</Link>
-            {/*<strong>`${make} ${model}` </strong>*/}
-          </CardTitle>
-          <CardText>
-            <strong>License:</strong> {license} <br />
-            <strong>State:</strong> {state} <br />
-            <strong>VIN:</strong> {vin} <br />
-            <strong>TWF:</strong> {twf} <br />
-            <strong>Year:</strong> {year} <br />
-            <strong>Make:</strong> {make} <br />
-            <strong>Model:</strong> {model} <br />
-            <strong>Pur_Date:</strong> {pur_date} <br />
-            <strong>Mileage:</strong> {' '}
-            {`${mileage}`}
-          </CardText>
-        </CardBody>
-      </Card>
+      <div>
+        <Card style={{ width: '30rem', width: "30vw", margin: '0 auto' }}>
+          <CardBody>
+          < CardTitle>
+            <strong>To Vehicle Page&rarr;</strong> <Link to={"/VehiclePage"} onClick = {() => vehicleInfoPage(
+                {
+                  idP: id,
+                  licenseP: license, 
+                  stateP: state, 
+                  vinP: vin, 
+                  twfP: twf, 
+                  yearP: year, 
+                  makeP: make, 
+                  modelP: model, 
+                  pur_dateP: pur_date, 
+                  mileageP: mileage
+                })}>{twf} {year} {make} {model}</Link>
+              {/*<strong>`${make} ${model}` </strong>*/}
+            </CardTitle>
+            <CardText>
+              <strong>License:</strong> {license} <br />
+              <strong>State:</strong> {state} <br />
+              <strong>VIN:</strong> {vin} <br />
+              <strong>TWF:</strong> {twf} <br />
+              <strong>Year:</strong> {year} <br />
+              <strong>Make:</strong> {make} <br />
+              <strong>Model:</strong> {model} <br />
+              <strong>Pur_Date:</strong> {pur_date} <br />
+              <strong>Mileage:</strong> {' '}
+              {`${mileage}`}
+            </CardText>
+          </CardBody>
+        </Card>
+      </div>
     );
   };
 
@@ -278,6 +281,7 @@ const Home = () => {
   console.log(auth.currentUser);
   return (
     <div>
+      <NavBar/>
       {
         auth.currentUser != null ?
           <Container style={{ marginTop: 0 }}>

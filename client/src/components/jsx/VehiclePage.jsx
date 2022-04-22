@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { getDatabase, ref, remove, set, onValue } from "firebase/database";
 import { nanoid } from "nanoid";
 import { getAuth } from "firebase/auth"
+import NavBar from "./NavBar"
+
 
 
 function VehiclePage() {
@@ -155,6 +157,7 @@ function VehiclePage() {
 
     return (
          <div>
+             <NavBar/>
             {
                 auth.currentUser != null && vehicleData != null ?
                     <div>
