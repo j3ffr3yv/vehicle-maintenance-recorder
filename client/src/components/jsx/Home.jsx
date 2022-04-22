@@ -1,14 +1,5 @@
 import * as React from 'react';
-import {useState, Fragment, useEffect, useMemo} from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { visuallyHidden } from '@mui/utils';
-import Input from "@material-ui/core/Input";
-import { makeStyles } from '@material-ui/core/styles';
+import {useState, Fragment, useEffect, useMemo, useReducer} from 'react';
 import "../css/Home.css"
 import { getDatabase, ref, remove, set, onValue } from "firebase/database";
 import {
@@ -22,8 +13,15 @@ import {
 import TableContainer from '../js/TableContainer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { SelectColumnFilter } from '../js/Filter.js';
+import { Link } from "react-router-dom";
+import { nanoid } from "nanoid";
+import { getAuth } from "firebase/auth"
 
 const Home = () => {
+
+  const auth = getAuth();
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+
   //Vehicles
   const [vehicles, setVehicles] = useState([]);
   //AddVehicleData
@@ -70,13 +68,13 @@ const Home = () => {
           Object.values(data).map((curVehicle, k) => {
               newVehicles.push(curVehicle);
           })
+          setVehicles(newVehicles); 
       });
-
-      setVehicles(newVehicles); 
   }
   const writeVehicleData = (vehicle) => {
       const db = getDatabase();
-      set(ref(db, 'vehicles/' + vehicle.twf), {
+      set(ref(db, 'vehicles/' + vehicle.id), {
+        id: vehicle.id,
         license: vehicle.license, 
         state: vehicle.state,
         vin: vehicle.vin, 
@@ -99,6 +97,26 @@ const Home = () => {
 
       setAddVehicleData(newVehicleData);
   }
+  const handleAddVehicleSubmit = (event) => {
+    event.preventDefault();
+
+    const newVehicle = {
+        id: nanoid(),
+        license: addVehicleData.license, 
+        state: addVehicleData.state,
+        vin: addVehicleData.vin, 
+        twf: addVehicleData.twf, 
+        year: addVehicleData.year, 
+        make: addVehicleData.make, 
+        model: addVehicleData.model, 
+        pur_date: addVehicleData.pur_date, 
+        mileage: addVehicleData.mileage
+    }
+
+    writeVehicleData(newVehicle);
+    const newVehicles = [...vehicles, newVehicle];
+    setVehicles(newVehicles);
+  }
   const handleEditVehicleChange = (event) => {
       event.preventDefault();
 
@@ -110,30 +128,12 @@ const Home = () => {
 
       setEditVehicleData(newVehicleData);
   }
-  const handleAddVehicleSubmit = (event) => {
-      event.preventDefault();
-
-      const newVehicle = {
-          license: addVehicleData.license, 
-          state: addVehicleData.state,
-          vin: addVehicleData.vin, 
-          twf: addVehicleData.twf, 
-          year: addVehicleData.year, 
-          make: addVehicleData.make, 
-          model: addVehicleData.model, 
-          pur_date: addVehicleData.pur_date, 
-          mileage: addVehicleData.mileage
-      }
-
-      writeVehicleData(newVehicle);
-      const newVehicles = [...vehicles, newVehicle];
-      setVehicles(newVehicles);
-  }
   const handleEditVehicleSubmit = (event) => {
       const db = getDatabase();
       event.preventDefault();
 
       const editedVehicle = {
+          id: editVehicleID,
           license: editVehicleData.license, 
           state: editVehicleData.state,
           vin: editVehicleData.vin, 
@@ -176,18 +176,27 @@ const Home = () => {
       setEditVehicleID(null);
   }
   const handleDeleteClick = (vehicle) => {
-      const db = getDatabase();
-      const newVehicles = [...vehicles];
+    console.log("DELETE");
+    const db = getDatabase();
+    const newVehicles = [...vehicles];
 
-      const index = vehicles.findIndex((vehicleI) => vehicleI.twf = vehicle.twf);
-      newVehicles.splice(index, 1);
+    const index = vehicles.findIndex((vehicleI) => vehicleI.twf = vehicle.twf);
+    newVehicles.splice(index, 1);
 
-      remove(ref(db, 'vehicles/' + vehicle.twf));
-      setVehicles(newVehicles);
+    remove(ref(db, 'vehicles/' + vehicle.twf));
+    setVehicles(newVehicles);
+    localStorage.setItem("loadedVehicle", null);
+    window.location.href = '/'
+  }
+  
+  function vehicleInfoPage(vehicleInfo) {
+    localStorage.setItem("loadedVehicle", JSON.stringify(vehicleInfo));
+    console.log("VEHICLE TO PAGE: " + localStorage.getItem("loadedVehicle"));
   }
 
   const renderRowSubComponent = (row) => {
     const {
+      id,
       license,
       state,
       vin,
@@ -198,16 +207,37 @@ const Home = () => {
       pur_date,
       mileage
     } = row.original;
+
     return (
-      <Card style={{ width: '18rem', margin: '0 auto' }}>
+      <Card style={{ width: '30rem', width: "30vw", margin: '0 auto' }}>
         <CardBody>
           <CardTitle>
-            <strong>{`${make} ${model}`} </strong>
+          <strong>To Vehicle Page&rarr;</strong> <Link to={"/VehiclePage"} onClick = {() => vehicleInfoPage(
+              {
+                idP: id,
+                licenseP: license, 
+                stateP: state, 
+                vinP: vin, 
+                twfP: twf, 
+                yearP: year, 
+                makeP: make, 
+                modelP: model, 
+                pur_dateP: pur_date, 
+                mileageP: mileage
+              })}>{twf} {year} {make} {model}</Link>
+            {/*<strong>`${make} ${model}` </strong>*/}
           </CardTitle>
           <CardText>
-            <strong>Phone</strong>: {pur_date} <br />
-            <strong>Address:</strong>{' '}
-            {`${license} ${state} - ${vin} - ${twf}`}
+            <strong>License:</strong> {license} <br />
+            <strong>State:</strong> {state} <br />
+            <strong>VIN:</strong> {vin} <br />
+            <strong>TWF:</strong> {twf} <br />
+            <strong>Year:</strong> {year} <br />
+            <strong>Make:</strong> {make} <br />
+            <strong>Model:</strong> {model} <br />
+            <strong>Pur_Date:</strong> {pur_date} <br />
+            <strong>Mileage:</strong> {' '}
+            {`${mileage}`}
           </CardText>
         </CardBody>
       </Card>
@@ -226,20 +256,6 @@ const Home = () => {
         ),
       },
       {
-        Header: 'LICENSE',
-        accessor: 'license',
-        Filter: SelectColumnFilter,
-        filter: 'equals',
-      },
-      {
-        Header: 'STATE',
-        accessor: 'state',
-      },
-      {
-        Header: 'VIN',
-        accessor: 'vin',
-      },
-      {
         Header: 'TWF',
         accessor: 'twf',
       },
@@ -255,104 +271,105 @@ const Home = () => {
         Header: 'MODEL',
         accessor: 'model',
       },
-      {
-        Header: 'PUR_DATE',
-        accessor: 'pur_date',
-      },
-      {
-        Header: 'MILEAGE',
-        accessor: 'mileage',
-      },
     ],
     []
   );
 
+  console.log(auth.currentUser);
   return (
-    <Container style={{ marginTop: 0 }}>
-      <div className = "addVehicle">
-                <h2>Add a Vehicle</h2>
-                <form onSubmit={handleAddVehicleSubmit}>
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="license"
-                    required="required"
-                    placeholder="State: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="state"
-                    required="required"
-                    placeholder="License: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="vin"
-                    required="required"
-                    placeholder="Vin: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="twf"
-                    required="required"
-                    placeholder="Twf: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="year"
-                    required="required"
-                    placeholder="Year: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="make"
-                    required="required"
-                    placeholder="Make: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    className = "inputAdd"
-                    type="text"
-                    name="model"
-                    required="required"
-                    placeholder="Model: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    type="text"
-                    className = "inputAdd"
-                    name="pur_date"
-                    required="required"
-                    placeholder="Pur_date: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <input
-                    type="text"
-                    className = "inputAdd"
-                    name="mileage"
-                    required="required"
-                    placeholder="Mileage: "
-                    onChange={handleAddVehicleChange}
-                    />
-                    <button type="submit">Add</button>
-                </form>
-            </div>
-      <TableContainer
-        columns={columns}
-        data={vehicles}
-        renderRowSubComponent={renderRowSubComponent}
-      />
-    </Container>
+    <div>
+      {
+        auth.currentUser != null ?
+          <Container style={{ marginTop: 0 }}>
+          {console.log("Rendering")}
+          <div>
+              <h2>Add a Vehicle</h2>
+              <form onSubmit={handleAddVehicleSubmit}>
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="license"
+                  required="required"
+                  placeholder="License: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="state"
+                  required="required"
+                  placeholder="State: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="vin"
+                  required="required"
+                  placeholder="Vin: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="twf"
+                  required="required"
+                  placeholder="Twf: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="year"
+                  required="required"
+                  placeholder="Year: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="make"
+                  required="required"
+                  placeholder="Make: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  className = "inputAdd"
+                  type="text"
+                  name="model"
+                  required="required"
+                  placeholder="Model: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  type="text"
+                  className = "inputAdd"
+                  name="pur_date"
+                  required="required"
+                  placeholder="Pur_date: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <input
+                  type="text"
+                  className = "inputAdd"
+                  name="mileage"
+                  required="required"
+                  placeholder="Mileage: "
+                  onChange={handleAddVehicleChange}
+                  />
+                  <button type="submit">Add</button>
+              </form>
+          </div>
+          <TableContainer
+          columns={columns}
+          data={vehicles}
+          renderRowSubComponent={renderRowSubComponent}
+          />
+          </Container>
+        :
+          <h1>Please log in in order to view this information!</h1>
+      }
+    </div>
   );
 };
 

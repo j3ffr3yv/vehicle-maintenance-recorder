@@ -4,7 +4,10 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import Home from './components/jsx/Home.jsx';
 import NavBar from './components/jsx/NavBar.jsx';
 import Login from './components/jsx/Login.jsx';
-import NewPage from './components/jsx/NewPage.jsx';
+import VehiclePage from './components/jsx/VehiclePage.jsx';
+import MaintenancePage from './components/jsx/MaintenancePage.jsx'
+import SignUp from './components/jsx/SignUp.jsx';
+
 
 import './components/css/NavBar.css';
 
@@ -56,8 +59,9 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path ="/login" element = {<Login/>} />
-                    <Route path ="/newpage" element = {<NewPage/>} />
-                    
+                    <Route path ="/vehiclepage" element = {<VehiclePage/>} />
+                    <Route path ="/maintenance" element = {<MaintenancePage/>} />
+                    <Route path ="/signup" element = {<SignUp/>} />
                 </Routes>   
         </Router>
     );
