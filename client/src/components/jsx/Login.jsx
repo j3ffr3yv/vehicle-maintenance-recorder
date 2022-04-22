@@ -4,8 +4,9 @@ import {AppBar, Typography, Grow, Grid, TextField} from '@material-ui/core';
 import {Card, Form,Button,Container} from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useHistory } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import {useNavigate} from 'react-router-dom'
+import NavBar from "./NavBar"
 
 function Login() {
 
@@ -15,16 +16,34 @@ function Login() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
+
   const login = e => {
     e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
         const user = userCredential.user;
         navigate('/')
+        console.log(auth.currentUser);
+        window.location.reload(false);
     })
     .catch(err => setError(err.message))
   }
-
+  
+  const passreset = e => {
+    e.preventDefault()
+    sendPasswordResetEmail(auth, email)
+  .then(() => {
+    alert.show("Password Reset Email Sent!")
+    // Password reset email sent!
+    // ..
+  })
+  .catch((error) => {
+    alert.show("ERROR: Invalid Info!")
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ..
+  });
+  }
   return(
     <div className='center'>
       <div className='auth'>
@@ -50,6 +69,10 @@ function Login() {
         <p>
           Don't have and account? 
           <Link to='/signup'>Sign Up</Link>
+        </p>
+        <p>
+          Forgot your login?
+          <Link to="/" onClick={passreset}>Reset Password</Link>
         </p>
       </div>
     </div>
