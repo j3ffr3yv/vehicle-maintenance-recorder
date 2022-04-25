@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link} from "react-router-dom"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Label } from 'reactstrap';
+import PasswordChecklist from "react-password-checklist"
 
 
 function SignUp() {
@@ -14,6 +15,8 @@ function SignUp() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+
+  const [passwordValid, setPasswordValid] = useState(false);
 
   const validatePassword = () => {
     let isValid = true
@@ -71,7 +74,15 @@ function SignUp() {
             placeholder='Confirm password'
             onChange={e => setConfirmPassword(e.target.value)}/>
 
-          <button type='submit'>Sign Up</button>
+          <PasswordChecklist 
+            rules = {["minLength","specialChar","number","capital","match"]} 
+            minLength = {5} 
+            value = {password} 
+            valueAgain = {confirmPassword}
+            onChange={(isValid) => {setPasswordValid(isValid)}}
+          />
+
+          <button type='submit' disabled = {!passwordValid}>Sign Up</button>
         </form>
         <span>
           Already have an account?  
