@@ -93,7 +93,7 @@ const Home = () => {
         make: vehicle.make, 
         model: vehicle.model, 
         pur_date: vehicle.pur_date, 
-        mileage: vehicle.mileage
+        mileage: vehicle.mileage,
       });
   }
   const handleAddVehicleChange = (event) => {
@@ -203,7 +203,7 @@ const Home = () => {
   
   function vehicleInfoPage(vehicleInfo) {
     localStorage.setItem("loadedVehicle", JSON.stringify(vehicleInfo));
-    console.log("VEHICLE TO PAGE: " + localStorage.getItem("loadedVehicle"));
+    //console.log("VEHICLE TO PAGE: " + localStorage.getItem("loadedVehicle"));
   }
 
   const renderRowSubComponent = (row) => {
