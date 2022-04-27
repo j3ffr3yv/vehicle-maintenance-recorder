@@ -65,10 +65,19 @@ const Home = () => {
       var newVehicles = [];
 
       onValue(starCountRef, (snapshot) => {
-          const data = snapshot.val();
-          Object.values(data).map((curVehicle, k) => {
+          let data = snapshot.val();
+
+          if (data == null)
+          {
+            console.log("vehicles does not exist")
+            set(ref(db, 'vehicles/'), null)
+            data = snapshot.val();
+          }
+          else {
+            Object.values(data).map((curVehicle, k) => {
               newVehicles.push(curVehicle);
-          })
+            })
+          }
           setVehicles(newVehicles); 
       });
   }
@@ -114,9 +123,11 @@ const Home = () => {
         mileage: addVehicleData.mileage
     }
 
+    setVehicles([...vehicles, newVehicle]);
     writeVehicleData(newVehicle);
-    const newVehicles = [...vehicles, newVehicle];
-    setVehicles(newVehicles);
+    //const newVehicles = [...vehicles, newVehicle];
+    console.log(vehicles);
+    updateVehicles();
   }
   const handleEditVehicleChange = (event) => {
       event.preventDefault();
@@ -278,7 +289,6 @@ const Home = () => {
     []
   );
 
-  console.log(auth.currentUser);
   return (
     <div>
       <NavBar/>

@@ -22,8 +22,6 @@ function NavBar(){
           });
           
     }
-
-    console.log(auth.currentUser);
     return (
         <div className = 'mainNavBarContent'>
             <img className='logoImage' src={require("../../Images/Logo.png")}/>
