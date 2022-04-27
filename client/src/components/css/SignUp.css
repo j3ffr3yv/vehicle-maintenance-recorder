@@ -25,6 +25,17 @@
     margin-bottom: 20px;
   }
   
+  @media screen and (min-width: 20px) {
+    form {
+      font-size: calc(16px + 6 * ((100vw - 320px) / 680));
+    }
+  }
+  @media screen and (min-width: 1000px) {
+    form {
+      font-size: 22px;
+    }
+  }
+
   .auth form > input, button{
     height: 40px;
     font-size: 16px;
