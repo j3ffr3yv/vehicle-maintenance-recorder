@@ -203,8 +203,7 @@ function VehiclePage() {
         });
         //vehicleData = vehicle;
 
-        vehicleData = 
-            {
+        localStorage.setItem("loadedVehicle", JSON.stringify({
             idP: vehicle.id,
             licenseP: vehicle.license, 
             stateP: vehicle.state,
@@ -215,21 +214,21 @@ function VehiclePage() {
             modelP: vehicle.model, 
             pur_dateP: vehicle.pur_date, 
             mileageP: vehicle.mileage,
-        };
-        //setIsEditing(false)
-        navigate('/')
+        }));
+        setIsEditing(false)
+        //navigate('/')
         
     }
 
     return (
          <div>
              <NavBar/>
+             <Link to="/"> 
+                <ArrowBackIosNewSharpIcon />
+            </Link>
             {
                 auth.currentUser != null && vehicleData != null ?
                     <div>
-                        <Link to="/"> 
-                            <ArrowBackIosNewSharpIcon />
-                        </Link>
                         <button onClick={handleDeleteVehicle}>
                             Delete
                         </button>
