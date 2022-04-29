@@ -293,7 +293,6 @@ function VehiclePage() {
                                 className = "inputAdd"
                                 type="text"
                                 name="parts_cost"
-                                required="required"
                                 placeholder="Parts Cost: "
                                 onChange={handleAddMaintenanceChange}
                                 />
@@ -301,7 +300,6 @@ function VehiclePage() {
                                 className = "inputAdd"
                                 type="text"
                                 name="labor"
-                                required="required"
                                 placeholder="Labor(hrs): "
                                 onChange={handleAddMaintenanceChange}
                                 />
@@ -309,7 +307,6 @@ function VehiclePage() {
                                 className = "inputAdd"
                                 type="text"
                                 name="notes"
-                                required="required"
                                 placeholder="Notes: "
                                 onChange={handleAddMaintenanceChange}
                                 />
