@@ -74,7 +74,8 @@ function VehiclePage() {
         mechanic: "",
         parts_cost: "",
         labor: "",
-        notes: ""
+        notes: "",
+        mileage: ""
     })
     //editVehicleData
     const [editMaintenanceData, setEditMaintenanceData] = useState({
@@ -84,7 +85,8 @@ function VehiclePage() {
         mechanic: "",
         parts_cost: "",
         labor: "",
-        notes: ""
+        notes: "",
+        mileage: ""
     });
     //UseEffect
         useEffect(() => {
@@ -123,7 +125,8 @@ function VehiclePage() {
           mechanic: maintenance.mechanic,
           parts_cost: maintenance.parts_cost,
           labor: maintenance.labor,
-          notes: maintenance.notes
+          notes: maintenance.notes,
+          mileage: maintenance.mileage
         });
     }
     const handleAddMaintenanceChange = (event) => {
@@ -142,11 +145,12 @@ function VehiclePage() {
         const newMaintenance = {
             id: nanoid(),
             name: addMaintenanceData.name,
-            date: Date.now(),
+            date: addMaintenanceData.date,
             mechanic: addMaintenanceData.mechanic,
             parts_cost: addMaintenanceData.parts_cost,
             labor: addMaintenanceData.labor,
-            notes: addMaintenanceData.notes
+            notes: addMaintenanceData.notes,
+            mileage: addMaintenanceData.mileage
         }
     
       writeMaintenanceData(newMaintenance);
@@ -236,11 +240,11 @@ function VehiclePage() {
 
                         {isEditing == false ? 
                                 <div>
-                                    <h1>Vehicle Data: {vehicleData.licenseP}</h1>
+                                    <h1>Vehicle Data: {vehicleData.twfP}</h1>
                                     <div className = "vehicleDataList">
                                         <div>State: {vehicleData.stateP}</div>
                                         <div>VIN: {vehicleData.vinP}</div>
-                                        <div>TWF: {vehicleData.twfP}</div>
+                                        <div>License: {vehicleData.licenseP}</div>
                                         <div>Year: {vehicleData.yearP}</div>
                                         <div>Make: {vehicleData.makeP}</div>
                                         <div>Model: {vehicleData.modelP}</div>
@@ -309,6 +313,22 @@ function VehiclePage() {
                                 placeholder="Notes: "
                                 onChange={handleAddMaintenanceChange}
                                 />
+                                <input
+                                className = "inputAdd"
+                                type="text"
+                                name="date"
+                                required="required"
+                                placeholder="Date: "
+                                onChange={handleAddMaintenanceChange}
+                                />
+                                <input
+                                className = "inputAdd"
+                                type="text"
+                                name="mileage"
+                                required="required"
+                                placeholder="Mileage: "
+                                onChange={handleAddMaintenanceChange}
+                                />
                                 <button type="submit">Add</button>
                             </form>
                         </div>
@@ -335,12 +355,13 @@ function VehiclePage() {
                                                         mechanic: currMaint.mechanic,
                                                         parts_cost: currMaint.parts_cost,
                                                         labor: currMaint.labor,
-                                                        notes: currMaint.notes
+                                                        notes: currMaint.notes,
+                                                        mileage: currMaint.mileage
                                                     }
-                                                )}>{Date(currMaint.date)}</Link>
+                                                )}>{currMaint.date}</Link>
                                             </td>
                                             <td>{currMaint.name}</td>
-                                            <td> #########</td>
+                                            <td>{currMaint.mileage}</td>
                                         </tr>
                                     )
                                 })}
