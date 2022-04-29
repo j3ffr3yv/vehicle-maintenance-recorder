@@ -335,7 +335,8 @@ function VehiclePage() {
                                                         mechanic: currMaint.mechanic,
                                                         parts_cost: currMaint.parts_cost,
                                                         labor: currMaint.labor,
-                                                        notes: currMaint.notes
+                                                        notes: currMaint.notes,
+                                                        vehicleID: vehicleData.idP
                                                     }
                                                 )}>{Date(currMaint.date)}</Link>
                                             </td>
