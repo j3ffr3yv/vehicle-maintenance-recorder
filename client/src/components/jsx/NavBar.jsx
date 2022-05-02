@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../css/NavBar.css";
 import {getAuth,signOut, sendPasswordResetEmail} from "firebase/auth"
 import { getDatabase, ref, get, child} from "firebase/database";
+import { Link } from "react-router-dom";
 
 import { DropdownMenu, MenuItem } from 'react-bootstrap-dropdown-menu';
 import Dropdown from 'react-bootstrap/Dropdown'
@@ -77,16 +78,22 @@ class Simple extends React.Component {
           
     }
       return (
-          <Dropdown>
-          <Dropdown.Toggle color="primary" id="userdisplay" title = "lol">
-          </Dropdown.Toggle>
-            <Dropdown.Menu>
-                <Dropdown.Item text="Home" location="/" />
-                <Dropdown.Item text="Edit Profile" location="/profile" />
-                <Dropdown.Item text="Change Password (via Email)" onClick={passreset} />
-                <Dropdown.Item text="Logout" onClick={LogOut} />
-            </Dropdown.Menu>
-          </Dropdown>
+          <div className = "navbarDropdown">
+            <Dropdown>
+            <Dropdown.Toggle color="primary" id="userdisplay" title = "lol">
+            </Dropdown.Toggle>
+              <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Link to = "/">Home</Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link to = "/profile">Edit Profile</Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item text="Change Password (via Email)" onClick={passreset} />
+                  <Dropdown.Item text="Logout" onClick={LogOut} />
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
       )
     }
     
