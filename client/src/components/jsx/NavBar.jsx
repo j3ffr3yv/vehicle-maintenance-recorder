@@ -6,7 +6,6 @@ import {getAuth,signOut, sendPasswordResetEmail} from "firebase/auth"
 import { getDatabase, ref, get, child} from "firebase/database";
 import { Link } from "react-router-dom";
 
-import { DropdownMenu, MenuItem } from 'react-bootstrap-dropdown-menu';
 import Dropdown from 'react-bootstrap/Dropdown'
 
 
