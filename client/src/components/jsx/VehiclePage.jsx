@@ -145,7 +145,7 @@ function VehiclePage() {
         const newMaintenance = {
             id: nanoid(),
             name: addMaintenanceData.name,
-            date: addMaintenanceData.date,
+            date: Date.now(),
             mechanic: addMaintenanceData.mechanic,
             parts_cost: addMaintenanceData.parts_cost,
             labor: addMaintenanceData.labor,
@@ -243,7 +243,7 @@ function VehiclePage() {
                                     <div className = "vehicleDataList">
                                         <div>State: {vehicleData.stateP}</div>
                                         <div>VIN: {vehicleData.vinP}</div>
-                                        <div>License: {vehicleData.licenseP}</div>
+                                        <div>Liscence: {vehicleData.licenseP}</div>
                                         <div>Year: {vehicleData.yearP}</div>
                                         <div>Make: {vehicleData.makeP}</div>
                                         <div>Model: {vehicleData.modelP}</div>
@@ -292,6 +292,7 @@ function VehiclePage() {
                                 className = "inputAdd"
                                 type="text"
                                 name="parts_cost"
+                                required="required"
                                 placeholder="Parts Cost: "
                                 onChange={handleAddMaintenanceChange}
                                 />
@@ -299,6 +300,7 @@ function VehiclePage() {
                                 className = "inputAdd"
                                 type="text"
                                 name="labor"
+                                required="required"
                                 placeholder="Labor(hrs): "
                                 onChange={handleAddMaintenanceChange}
                                 />
@@ -306,6 +308,7 @@ function VehiclePage() {
                                 className = "inputAdd"
                                 type="text"
                                 name="notes"
+                                required="required"
                                 placeholder="Notes: "
                                 onChange={handleAddMaintenanceChange}
                                 />
@@ -352,10 +355,9 @@ function VehiclePage() {
                                                         parts_cost: currMaint.parts_cost,
                                                         labor: currMaint.labor,
                                                         notes: currMaint.notes,
-                                                        mileage: currMaint.mileage
                                                         vehicleID: vehicleData.idP
                                                     }
-                                                )}>{currMaint.date}</Link>
+                                                )}>{Date(currMaint.date)}</Link>
                                             </td>
                                             <td>{currMaint.name}</td>
                                             <td>{currMaint.mileage}</td>

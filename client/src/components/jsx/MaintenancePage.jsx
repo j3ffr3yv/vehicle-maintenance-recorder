@@ -1,124 +1,361 @@
-import React, {useEffect, useState} from "react";
-import { getAuth } from "firebase/auth"
-import { Link } from "react-router-dom";
+import React, {useState, Fragment, useEffect, useMemo, useReducer} from 'react';
+import '../css/VehiclePage.css';
+import IconButton from '@mui/material/IconButton';
+import AddSharpIcon from '@mui/icons-material/AddSharp';
 import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
-import NavBar from "./NavBar"
-import "../css/MaintenancePage.css"
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+
 import { getDatabase, ref, remove, set, onValue } from "firebase/database";
-import { format } from 'date-fns'
+import { nanoid } from "nanoid";
+import { getAuth } from "firebase/auth"
+import NavBar from "./NavBar"
+import {useNavigate} from 'react-router-dom'
 
-const MaintenancePage = () => {
 
+
+function VehiclePage() {
+
+    const navigate = useNavigate()
     const auth = getAuth();
-    let maintenanceData = JSON.parse(localStorage.getItem("loadedMaintenance"));
+    let vehicleData = JSON.parse(localStorage.getItem("loadedVehicle"));
+    const [maintenances, setMaintenances] = useState([]);
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editingData, setEditingData] = useState({id: maintenanceData.id, name: "", date: null, mechanic: "", parts_cost: "", labor: "", notes: "", vehicleID: maintenanceData.vehicleID});
-
-    function handleDelete()
-    {
-        console.log("delete");
-        const db = getDatabase();
-        remove(ref(db, 'vehicles/' + maintenanceData.vehicleID + "/maintenances/" + maintenanceData.id))
-        localStorage.setItem("loadedMaintenance", null);
-        maintenanceData = null;
-        window.location.href = "/vehiclepage";
-        console.log("deleted");
-    }
+    const [editingData, setEditingData] = useState({id: vehicleData.idP, state: "", license: vehicleData.licenseP, vin: "", twf: "", year: "", make: "", model: "", pur_date: "", mileage: ""})
 
     useEffect(() => {
-        if (maintenanceData == null)
+        if (vehicleData == null)
         {
             window.location.href = '/'
         }
     })
 
-    function handleStartEdit()
+    
+    const maintenance = () =>
     {
-        setIsEditing(true);
+        const db = getDatabase();
+        const Ref = ref(db, 'vehicles/'+ vehicleData.idP + '/maintenances');
+        var newMaintenances = [];
+    
+        onValue(Ref, (snapshot) => {
+            let data = snapshot.val();
+
+            if(data == null)
+            {
+                set(ref(db, 'vehicles/' + vehicleData.idP + '/maintenances/'), null)
+                data = snapshot.val();
+            }
+            else {
+                Object.values(data).map((curMaintanences, k) => {
+                    displayMaintenances.push(curMaintanences);
+                    
+                    forceUpdate();
+                })
+            }
+        });
+    }
+
+    useEffect(() => {
+        if (maintenances.length == 0)
+        {
+            maintenance();
+        }
+    },[])
+
+    //Vehicles
+    const [displayMaintenances, setDisplayMaintenances] = useState([]);
+    //AddVehicleData
+    const [addMaintenanceData, setAddMaintenanceData] = useState({
+        id: "",
+        name: "",
+        date: "",
+        mechanic: "",
+        parts_cost: "",
+        labor: "",
+        notes: ""
+    })
+    //editVehicleData
+    const [editMaintenanceData, setEditMaintenanceData] = useState({
+        id: "",
+        name: "",
+        date: "",
+        mechanic: "",
+        parts_cost: "",
+        labor: "",
+        notes: ""
+    });
+    //UseEffect
+        useEffect(() => {
+        updateMaintenances();
+    }, [])
+    //All original functions for home page.
+    const updateMaintenances = () =>
+    {
+        const db = getDatabase();
+        const starCountRef = ref(db, 'vehicles/' + vehicleData.idP + '/maintenances/');
+        var newMaintenances = [];
+  
+        onValue(starCountRef, (snapshot) => {
+            let data = snapshot.val();
+
+            if(data == null)
+            {
+                set(ref(db, 'vehicles/' + vehicleData.idP + '/maintenances/'), null)
+                data = snapshot.val();
+            }
+            else {
+                Object.values(data).map((curMaintenance, k) => {
+                    newMaintenances.push(curMaintenance);
+                })
+            }
+            setMaintenances(newMaintenances);
+        });
+   
+    }
+    const writeMaintenanceData = (maintenance) => {
+        const db = getDatabase();
+        set(ref(db, 'vehicles/' + vehicleData.idP + '/maintenances/' + maintenance.id), {
+          id: maintenance.id,
+          name: maintenance.name,
+          date: maintenance.date,
+          mechanic: maintenance.mechanic,
+          parts_cost: maintenance.parts_cost,
+          labor: maintenance.labor,
+          notes: maintenance.notes
+        });
+    }
+    const handleAddMaintenanceChange = (event) => {
+        event.preventDefault();
+  
+        const fieldName = event.target.getAttribute("name");
+        const fieldValue = event.target.value;
+  
+        const newMaintenanceData = {...addMaintenanceData};
+        newMaintenanceData[fieldName] = fieldValue;
+  
+        setAddMaintenanceData(newMaintenanceData);
+    }
+    const handleAddMaintenanceSubmit = (event) => {
+        event.preventDefault();
+        const newMaintenance = {
+            id: nanoid(),
+            name: addMaintenanceData.name,
+            date: Date.now(),
+            mechanic: addMaintenanceData.mechanic,
+            parts_cost: addMaintenanceData.parts_cost,
+            labor: addMaintenanceData.labor,
+            notes: addMaintenanceData.notes
+        }
+    
+      writeMaintenanceData(newMaintenance);
+      const newMaintenances = [...maintenances, newMaintenance];
+      setMaintenances(newMaintenances);
+    }
+
+    function handleMaintenancePage(maintenance) {
+        localStorage.setItem("loadedMaintenance", JSON.stringify(maintenance))
+        //console.log("MAINTENANCE TO PAGE: " + localStorage.getItem("loadedMaintenance"));
+    }
+
+    function handleDeleteVehicle() {
+        //console.log("DELETING " + vehicleData.idP)
+        const db = getDatabase();
+        remove(ref(db, 'vehicles/' + vehicleData.idP));
+        localStorage.setItem("loadedVehicle", null);
+        vehicleData = null;
+        window.location.href = '/'
+       // window.location.reload(false);
+    }
+
+    function handleStartEditing()
+    {
+        setIsEditing(true)
         setEditingData({
-            id: maintenanceData.id,
-            name: maintenanceData.name,
-            date: maintenanceData.date,
-            mechanic: maintenanceData.mechanic,
-            parts_cost: maintenanceData.parts_cost,
-            labor: maintenanceData.labor,
-            notes: maintenanceData.notes,
-            vehicleID: maintenanceData.vehicleID 
+            id: vehicleData.idP, 
+            state: vehicleData.stateP, 
+            license: vehicleData.licenseP, 
+            vin: vehicleData.vinP, 
+            twf: vehicleData.twfP, 
+            year: vehicleData.yearP, 
+            make: vehicleData.makeP, 
+            model: vehicleData.modelP, 
+            pur_date: vehicleData.pur_dateP,
+            mileage: vehicleData.mileageP
         })
     }
 
-    function handleSubmit(maintenance)
+    function handleSubmitEdit(vehicle)
     {
         const db = getDatabase();
-        set(ref(db, 'vehicles/' + maintenance.vehicleID + "/maintenances/" + maintenance.id), {
-            id: maintenance.id,
-            name: maintenance.name,
-            date: maintenance.date,
-            mechanic: maintenance.mechanic,
-            parts_cost: maintenance.parts_cost,
-            labor: maintenance.labor,
-            notes: maintenance.notes,
-            vehicleID: maintenance.vehicleID
+        set(ref(db, 'vehicles/' + vehicle.id), {
+            id: vehicle.id,
+            license: vehicle.license, 
+            state: vehicle.state,
+            vin: vehicle.vin, 
+            twf: vehicle.twf, 
+            year: vehicle.year, 
+            make: vehicle.make, 
+            model: vehicle.model, 
+            pur_date: vehicle.pur_date, 
+            mileage: vehicle.mileage,
         });
+        //vehicleData = vehicle;
 
-        localStorage.setItem("loadedMaintenance", JSON.stringify({
-            id: maintenance.id,
-            name: maintenance.name,
-            date: maintenance.date,
-            mechanic: maintenance.mechanic,
-            parts_cost: maintenance.parts_cost,
-            labor: maintenance.labor,
-            notes: maintenance.notes,
-            vehicleID: maintenance.vehicleID
+        localStorage.setItem("loadedVehicle", JSON.stringify({
+            idP: vehicle.id,
+            licenseP: vehicle.license, 
+            stateP: vehicle.state,
+            vinP: vehicle.vin, 
+            twfP: vehicle.twf, 
+            yearP: vehicle.year, 
+            makeP: vehicle.make, 
+            modelP: vehicle.model, 
+            pur_dateP: vehicle.pur_date, 
+            mileageP: vehicle.mileage,
         }));
-
-        setIsEditing(false);
+        setIsEditing(false)
+        //navigate('/')
+        
     }
 
     return (
-        <div>
-            <NavBar/>
-            <Link to="/vehiclepage"> 
+         <div>
+             <NavBar/>
+             <Link to="/"> 
                 <ArrowBackIosNewSharpIcon />
             </Link>
-            { 
-                auth.currentUser != null & maintenanceData != null?
+            {
+                auth.currentUser != null && vehicleData != null ?
                     <div>
-                        <button onClick = {handleDelete}>
-                            delete
+                        <button onClick={handleDeleteVehicle}>
+                            Delete
                         </button>
+
                         {isEditing == false ? 
-                            <div>
-                                <h1>Maintenance Data: {maintenanceData.name}</h1>
-                                <div className = "maintenanceDataList">
-                                    <p>{maintenanceData.date}</p>
-                                    <p>{maintenanceData.mechanic}</p>
-                                    <p>{maintenanceData.parts_cost}</p>
-                                    <p>{maintenanceData.labor}</p>
-                                    <p>{maintenanceData.notes}</p>
-                                    <button onClick = {handleStartEdit}> edit </button>
+                                <div>
+                                    <h1>Vehicle Data: {vehicleData.licenseP}</h1>
+                                    <div className = "vehicleDataList">
+                                        <div>State: {vehicleData.stateP}</div>
+                                        <div>VIN: {vehicleData.vinP}</div>
+                                        <div>TWF: {vehicleData.twfP}</div>
+                                        <div>Year: {vehicleData.yearP}</div>
+                                        <div>Make: {vehicleData.makeP}</div>
+                                        <div>Model: {vehicleData.modelP}</div>
+                                        <div>Purchase Date: {vehicleData.pur_dateP}</div>
+                                        <div>Mileage: {vehicleData.mileageP}</div>
+                                        <button onClick = {handleStartEditing}>Edit</button>
+                                    </div>
                                 </div>
-                            </div>
                             :
-                            <div>
-                                <h1>Editing Maintenance Data...</h1>
-                                <div className = "maintenanceDataList">
-                                <input placeholder = "Name..." defaultValue = {maintenanceData.name} onChange = {(event) => setEditingData({...editingData, name: event.target.value})}></input>
-                                    <input placeholder = "Date..." defaultValue = {maintenanceData.date} onChange = {(event) => setEditingData({...editingData, date: event.target.value})}></input>
-                                    <input placeholder = "Mechanic..." defaultValue = {maintenanceData.mechanic} onChange = {(event) => setEditingData({...editingData, mechanic: event.target.value})}></input>
-                                    <input placeholder = "Cost of Parts..." defaultValue = {maintenanceData.parts_cost} onChange = {(event) => setEditingData({...editingData, parts_cost: event.target.value})}></input>
-                                    <input placeholder = "Labor hours..." defaultValue = {maintenanceData.labor} onChange = {(event) => setEditingData({...editingData, labor: event.target.value})}></input>
-                                    <input placeholder = "Notes..." defaultValue = {maintenanceData.notes} onChange = {(event) => setEditingData({...editingData, notes: event.target.value})}></input>
-                                    <button onClick = {() => handleSubmit(editingData)}> submit </button>
+                                <div>
+                                    <h1>Editing Vehicle Data...</h1>
+                                    <div className = "vehicleDataList">
+                                        <input placeholder = "State..." defaultValue = {vehicleData.stateP} onChange = {(event) => setEditingData({...editingData, state: event.target.value})}></input>
+                                        <input placeholder = "VIN..." defaultValue = {vehicleData.vinP} onChange = {(event) => setEditingData({...editingData, vin: event.target.value})}></input>
+                                        <input placeholder = "TWF..." defaultValue = {vehicleData.twfP} onChange = {(event) => setEditingData({...editingData, twf: event.target.value})}></input>
+                                        <input placeholder = "Year..." defaultValue = {vehicleData.yearP} onChange = {(event) => setEditingData({...editingData, year: event.target.value})}></input>
+                                        <input placeholder = "Make..." defaultValue = {vehicleData.makeP} onChange = {(event) => setEditingData({...editingData, make: event.target.value})}></input>
+                                        <input placeholder = "Model..." defaultValue = {vehicleData.modelP} onChange = {(event) => setEditingData({...editingData, model: event.target.value})}></input>
+                                        <input placeholder = "Purchase_date..." defaultValue = {vehicleData.pur_dateP} onChange = {(event) => setEditingData({...editingData, pur_date: event.target.value})}></input>
+                                        <input placeholder = "Mileage..." defaultValue = {vehicleData.mileageP} onChange = {(event) => setEditingData({...editingData, mileage: event.target.value})}></input>
+                                        <button onClick = {() => handleSubmitEdit(editingData)}>Submit</button>
+                                    </div>
                                 </div>
-                            </div>
                         }
+
+                        <div className = "addMaintenance">
+                            <h2>Add Maintenance</h2>
+                            <form onSubmit={handleAddMaintenanceSubmit}>
+                                <input
+                                className = "inputAdd"
+                                type="text"
+                                name="name"
+                                required="required"
+                                placeholder="Name: "
+                                onChange={handleAddMaintenanceChange}
+                                />
+                                <input
+                                className = "inputAdd"
+                                type="text"
+                                name="mechanic"
+                                defaultValue=""
+                                placeholder="Mechanic: "
+                                onChange={handleAddMaintenanceChange}
+                                />
+                                <input
+                                className = "inputAdd"
+                                type="text"
+                                name="parts_cost"
+                                required="required"
+                                placeholder="Parts Cost: "
+                                onChange={handleAddMaintenanceChange}
+                                />
+                                <input
+                                className = "inputAdd"
+                                type="text"
+                                name="labor"
+                                required="required"
+                                placeholder="Labor(hrs): "
+                                onChange={handleAddMaintenanceChange}
+                                />
+                                <input
+                                className = "inputAdd"
+                                type="text"
+                                name="notes"
+                                required="required"
+                                placeholder="Notes: "
+                                onChange={handleAddMaintenanceChange}
+                                />
+                                <button type="submit">Add</button>
+                            </form>
+                        </div>
+                
+                        <h1 className = "maintenancePerformed">Maintenance Performed</h1>
+                        <table className = "table">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Service</th>
+                                <th>Mileage</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {displayMaintenances.map((currMaint, index) => {
+                                    return (
+                                        <tr key = {index}>
+                                            <td>
+                                                <Link to = "/maintenance" onClick = {() => handleMaintenancePage(
+                                                    {
+                                                        id: currMaint.id,
+                                                        name: currMaint.name,
+                                                        date: currMaint.date,
+                                                        mechanic: currMaint.mechanic,
+                                                        parts_cost: currMaint.parts_cost,
+                                                        labor: currMaint.labor,
+                                                        notes: currMaint.notes,
+                                                        vehicleID: vehicleData.idP
+                                                    }
+                                                )}>{Date(currMaint.date)}</Link>
+                                            </td>
+                                            <td>{currMaint.name}</td>
+                                            <td> #########</td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                        <IconButton aria-label="delete"> 
+                        <AddSharpIcon />
+                        </IconButton>
                     </div>
-                :
+                : 
                     <h1>Please log in in order to view this information!</h1>
             }
-        </div>
+         </div>   
     )
 }
-export default MaintenancePage;
+
+
+export default VehiclePage;
