@@ -18,13 +18,11 @@
 
 .navButtons {
     display: flex;
-    padding-top: 20px;
     padding-right: 40px; 
-    align-content:center;
+    align-content:top;
     justify-content: right;
     flex-direction:row;
     float: right;
-    width: 50%;
     
     font-size: 40px;
     color: rgb(255, 255, 255);
