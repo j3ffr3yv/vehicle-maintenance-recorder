@@ -1,0 +1,8 @@
+.maintenanceDataList {
+    font-size: 25px;
+    display: block;
+    color: white;
+    background-color: rgb(82,178,207);
+    width: 30%;
+    padding: 10px;
+}
