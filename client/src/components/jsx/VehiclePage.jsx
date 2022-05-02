@@ -352,11 +352,8 @@ function VehiclePage() {
                                                         parts_cost: currMaint.parts_cost,
                                                         labor: currMaint.labor,
                                                         notes: currMaint.notes,
-<<<<<<< HEAD
                                                         mileage: currMaint.mileage
-=======
                                                         vehicleID: vehicleData.idP
->>>>>>> a6e9d3ee981921e1f472009c4c37897ab56bd7ec
                                                     }
                                                 )}>{currMaint.date}</Link>
                                             </td>
