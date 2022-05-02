@@ -94,6 +94,7 @@ const Home = () => {
         model: vehicle.model, 
         pur_date: vehicle.pur_date, 
         mileage: vehicle.mileage,
+        maintenances: vehicle.maintenances
       });
   }
   const handleAddVehicleChange = (event) => {
@@ -120,7 +121,8 @@ const Home = () => {
         make: addVehicleData.make, 
         model: addVehicleData.model, 
         pur_date: addVehicleData.pur_date, 
-        mileage: addVehicleData.mileage
+        mileage: addVehicleData.mileage,
+        maintenances: []
     }
 
     setVehicles([...vehicles, newVehicle]);
@@ -128,77 +130,6 @@ const Home = () => {
     //const newVehicles = [...vehicles, newVehicle];
     console.log(vehicles);
     updateVehicles();
-  }
-  const handleEditVehicleChange = (event) => {
-      event.preventDefault();
-
-      const fieldName = event.target.getAttribute("name");
-      const fieldValue = event.target.value;
-
-      const newVehicleData = {...editVehicleData};
-      newVehicleData[fieldName] = fieldValue;
-
-      setEditVehicleData(newVehicleData);
-  }
-  const handleEditVehicleSubmit = (event) => {
-      const db = getDatabase();
-      event.preventDefault();
-
-      const editedVehicle = {
-          id: editVehicleID,
-          license: editVehicleData.license, 
-          state: editVehicleData.state,
-          vin: editVehicleData.vin, 
-          twf: editVehicleData.twf, 
-          year: editVehicleData.year, 
-          make: editVehicleData.make, 
-          model: editVehicleData.model, 
-          pur_date: editVehicleData.pur_date, 
-          mileage: editVehicleData.mileage
-      }
-
-      const newVehicles = [...vehicles];
-      const index = vehicles.findIndex((vehicleI) => vehicleI.twf = editedVehicle.twf);
-
-      newVehicles[index] = editedVehicle;
-
-      writeVehicleData(editedVehicle);
-      setVehicles(newVehicles);
-      setEditVehicleID(null);
-  }
-  const handleEditClick = (event, v) => {
-      event.preventDefault();
-      setEditVehicleID(v.id);
-
-      const vehicleValues = {
-          license: v.license, 
-          state: v.state,
-          vin: v.vin, 
-          twf: v.twf, 
-          year: v.year, 
-          make: v.make, 
-          model: v.model, 
-          pur_date: v.pur_date, 
-          mileage: v.mileage
-      }
-
-      setEditVehicleData(vehicleValues);
-  }
-  const handleCancelClick = () => {
-      setEditVehicleID(null);
-  }
-  const handleDeleteClick = (vehicle) => {
-    console.log("DELETE");
-    const db = getDatabase();
-    const newVehicles = [...vehicles];
-
-    const index = vehicles.findIndex((vehicleI) => vehicleI.twf = vehicle.twf);
-    newVehicles.splice(index, 1);
-
-    remove(ref(db, 'vehicles/' + vehicle.twf));
-    setVehicles(newVehicles);
-    localStorage.setItem("loadedVehicle", null);
-    window.location.href = '/'
   }
   
   function vehicleInfoPage(vehicleInfo) {
@@ -217,7 +148,8 @@ const Home = () => {
       make,
       model,
       pur_date,
-      mileage
+      mileage,
+      maintenances
     } = row.original;
 
     return (
@@ -236,7 +168,8 @@ const Home = () => {
                   makeP: make, 
                   modelP: model, 
                   pur_dateP: pur_date, 
-                  mileageP: mileage
+                  mileageP: mileage,
+                  maintenancesP: maintenances
                 })}>{twf} {year} {make} {model}</Link>
               {/*<strong>`${make} ${model}` </strong>*/}
             </CardTitle>

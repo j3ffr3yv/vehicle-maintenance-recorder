@@ -23,7 +23,7 @@ function VehiclePage() {
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editingData, setEditingData] = useState({id: vehicleData.idP, state: "", license: vehicleData.licenseP, vin: "", twf: "", year: "", make: "", model: "", pur_date: "", mileage: ""})
+    const [editingData, setEditingData] = useState({id: vehicleData.idP, state: "", license: vehicleData.licenseP, vin: "", twf: "", year: "", make: "", model: "", pur_date: "", mileage: "", maintenances: []})
 
     useEffect(() => {
         if (vehicleData == null)
@@ -49,10 +49,12 @@ function VehiclePage() {
             }
             else {
                 Object.values(data).map((curMaintanences, k) => {
-                    displayMaintenances.push(curMaintanences);
+                    newMaintenances.push(curMaintanences);
                     
                     forceUpdate();
                 })
+                setDisplayMaintenances(newMaintenances);
+                forceUpdate();
             }
         });
     }
@@ -112,6 +114,7 @@ function VehiclePage() {
                     newMaintenances.push(curMaintenance);
                 })
             }
+            setEditingData({...editingData, maintenances: newMaintenances})
             setMaintenances(newMaintenances);
         });
    
@@ -176,7 +179,7 @@ function VehiclePage() {
     function handleStartEditing()
     {
         setIsEditing(true)
-        setEditingData({
+        setEditingData({...editingData,
             id: vehicleData.idP, 
             state: vehicleData.stateP, 
             license: vehicleData.licenseP, 
@@ -186,7 +189,7 @@ function VehiclePage() {
             make: vehicleData.makeP, 
             model: vehicleData.modelP, 
             pur_date: vehicleData.pur_dateP,
-            mileage: vehicleData.mileageP
+            mileage: vehicleData.mileageP,
         })
     }
 
@@ -204,6 +207,7 @@ function VehiclePage() {
             model: vehicle.model, 
             pur_date: vehicle.pur_date, 
             mileage: vehicle.mileage,
+            maintenances: vehicle.maintenances
         });
         //vehicleData = vehicle;
 
@@ -218,6 +222,7 @@ function VehiclePage() {
             modelP: vehicle.model, 
             pur_dateP: vehicle.pur_date, 
             mileageP: vehicle.mileage,
+            maintenancesP: vehicle.maintenances
         }));
         setIsEditing(false)
         //navigate('/')
