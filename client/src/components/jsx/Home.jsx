@@ -21,6 +21,8 @@ import NavBar from "./NavBar"
 import Modal from 'react-bootstrap/Modal'
 import { Button } from 'react-bootstrap';
 
+import Uploader from '../js/Uploader.js';
+
 const Home = () => {
 
   const auth = getAuth();
@@ -103,6 +105,11 @@ const Home = () => {
         mileage: vehicle.mileage,
         maintenances: vehicle.maintenances
       });
+  }
+  const uponModalClose = (event) => {
+    event.preventDefault();
+    updateVehicles();
+    handleClose();
   }
   const handleAddVehicleChange = (event) => {
       event.preventDefault();
@@ -254,7 +261,7 @@ const Home = () => {
           <div>
               <Modal
                 show={show}
-                onHide={handleClose}
+                onHide={uponModalClose}
                 backdrop="static"
                 keyboard={false}
               >
@@ -340,9 +347,10 @@ const Home = () => {
                       <button type="submit">Add</button>
                   </form>
                   <h2>Or, upload excel document</h2>
+                  <Uploader></Uploader>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={handleClose}>
+                  <Button variant="secondary" onClick={uponModalClose}>
                     Close
                   </Button>
                   <Button variant="primary">Understood</Button>
