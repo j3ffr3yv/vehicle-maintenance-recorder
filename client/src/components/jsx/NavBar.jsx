@@ -34,9 +34,25 @@ function NavBar(){
 
 class Simple extends React.Component {
     render() {
-        var  auth = getAuth();
-        var  user = auth.currentUser
-        var userName = ""
+        var auth = getAuth();
+        var user = auth.currentUser
+        var userId = user.uid
+        const dbRef = ref(getDatabase());
+    function masterCheck(){
+      get(child(dbRef, `users/${userId}/master`)).then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+          if (snapshot.val() == true){
+            console.log("Success!!")
+          }
+          return snapshot.val();
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    }
     function LogOut()
     {
         signOut(auth).then(() => {
@@ -54,6 +70,14 @@ class Simple extends React.Component {
           <button className = 'dropdownItem' onClick={LogOut}>
             Logout
           </button>
+          <div className = "navButtons">
+            {
+              masterCheck() != true ?
+              <Link to = "/signup">|Sign Up Users</Link>
+              :
+              <Link to = "/"></Link>
+            }
+          </div>
           <Link to = "/">Home</Link>
           </div>
       )

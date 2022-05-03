@@ -69,10 +69,6 @@ function Login() {
           <button type='submit'>Login</button>
         </form>
         <p>
-          Don't have and account? 
-          <Link to='/signup'>Sign Up</Link>
-        </p>
-        <p>
           Forgot your login?
           <Link to="/" onClick={passreset}>Reset Password</Link>
         </p>
