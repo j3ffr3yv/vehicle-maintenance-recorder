@@ -12,6 +12,8 @@ import { getAuth } from "firebase/auth"
 import NavBar from "./NavBar"
 import {useNavigate} from 'react-router-dom'
 
+import Modal from 'react-bootstrap/Modal'
+import { Button } from 'react-bootstrap';
 
 
 function VehiclePage() {
@@ -25,6 +27,11 @@ function VehiclePage() {
     const [isEditing, setIsEditing] = useState(false);
     const [editingData, setEditingData] = useState({id: vehicleData.idP, state: "", license: vehicleData.licenseP, vin: "", twf: "", year: "", make: "", model: "", pur_date: "", mileage: "", maintenances: []})
 
+    //Modal
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    
     useEffect(() => {
         if (vehicleData == null)
         {
@@ -275,69 +282,86 @@ function VehiclePage() {
                         }
 
                         <div className = "addMaintenance">
-                            <h2>Add Maintenance</h2>
-                            <form onSubmit={handleAddMaintenanceSubmit}>
-                                <input
-                                className = "inputAdd"
-                                type="text"
-                                name="name"
-                                required="required"
-                                placeholder="Name: "
-                                onChange={handleAddMaintenanceChange}
-                                />
-                                <input
-                                className = "inputAdd"
-                                type="text"
-                                name="mechanic"
-                                defaultValue=""
-                                placeholder="Mechanic: "
-                                onChange={handleAddMaintenanceChange}
-                                />
-                                <input
-                                className = "inputAdd"
-                                type="text"
-                                name="parts_cost"
-                                required="required"
-                                placeholder="Parts Cost: "
-                                onChange={handleAddMaintenanceChange}
-                                />
-                                <input
-                                className = "inputAdd"
-                                type="text"
-                                name="labor"
-                                required="required"
-                                placeholder="Labor(hrs): "
-                                onChange={handleAddMaintenanceChange}
-                                />
-                                <input
-                                className = "inputAdd"
-                                type="text"
-                                name="notes"
-                                required="required"
-                                placeholder="Notes: "
-                                onChange={handleAddMaintenanceChange}
-                                />
-                                <input
-                                className = "inputAdd"
-                                type="text"
-                                name="date"
-                                required="required"
-                                placeholder="Date: "
-                                onChange={handleAddMaintenanceChange}
-                                />
-                                <input
-                                className = "inputAdd"
-                                type="text"
-                                name="mileage"
-                                required="required"
-                                placeholder="Mileage: "
-                                onChange={handleAddMaintenanceChange}
-                                />
-                                <button type="submit">Add</button>
-                            </form>
+                        <Modal
+                            show={show}
+                            onHide={handleClose}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            <Modal.Header closeButton>
+                            <Modal.Title>Adding Maintenance</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <form onSubmit={handleAddMaintenanceSubmit} >
+                                    <input
+                                    className = "inputAdd"
+                                    type="text"
+                                    name="name"
+                                    required="required"
+                                    placeholder="Name: "
+                                    onChange={handleAddMaintenanceChange}
+                                    />
+                                    <input
+                                    className = "inputAdd"
+                                    type="text"
+                                    name="mechanic"
+                                    defaultValue=""
+                                    placeholder="Mechanic: "
+                                    onChange={handleAddMaintenanceChange}
+                                    />
+                                    <input
+                                    className = "inputAdd"
+                                    type="text"
+                                    name="parts_cost"
+                                    required="required"
+                                    placeholder="Parts Cost: "
+                                    onChange={handleAddMaintenanceChange}
+                                    />
+                                    <input
+                                    className = "inputAdd"
+                                    type="text"
+                                    name="labor"
+                                    required="required"
+                                    placeholder="Labor(hrs): "
+                                    onChange={handleAddMaintenanceChange}
+                                    />
+                                    <input
+                                    className = "inputAdd"
+                                    type="text"
+                                    name="notes"
+                                    required="required"
+                                    placeholder="Notes: "
+                                    onChange={handleAddMaintenanceChange}
+                                    />
+                                    <input
+                                    className = "inputAdd"
+                                    type="text"
+                                    name="date"
+                                    required="required"
+                                    placeholder="Date: "
+                                    onChange={handleAddMaintenanceChange}
+                                    />
+                                    <input
+                                    className = "inputAdd"
+                                    type="text"
+                                    name="mileage"
+                                    required="required"
+                                    placeholder="Mileage: "
+                                    onChange={handleAddMaintenanceChange}
+                                    />
+                                    <button type="submit">Add</button>
+                                </form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="primary">Understood</Button>
+                            </Modal.Footer>
+                        </Modal>
+
                         </div>
-                
-                        <h1 className = "maintenancePerformed">Maintenance Performed</h1>
+                        <h1 className = "maintenancePerformed">Maintenance Performed</h1>   
                         <table className = "table">
                             <thead>
                             <tr>
@@ -372,7 +396,7 @@ function VehiclePage() {
                             </tbody>
                         </table>
                         <IconButton aria-label="delete"> 
-                        <AddSharpIcon />
+                        <AddSharpIcon onClick={handleShow} />
                         </IconButton>
                     </div>
                 : 

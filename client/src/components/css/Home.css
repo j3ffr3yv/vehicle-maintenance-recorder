@@ -20,11 +20,19 @@
   
   th,
   td {
+    justify-content: left;
     border: 1px solid #ffffff;
-    text-align: left;
     padding: 8px;
-    font-size: 8px;
-    font-size: 2vw;
+  }
+  @media screen and (min-width: 20px) {
+    th,td {
+      font-size: calc(16px + 6 * ((100vw - 320px) / 680));
+    }
+  }
+  @media screen and (min-width: 1000px) {
+    th,td {
+      font-size: 22px;
+    }
   }
   
   th {
@@ -59,4 +67,14 @@
     width: 100%;
   }
 
+  .cardscaler {
+    width: '40rem';
+    width: "40vw";
+    margin: '0 auto';  
+  }
   
+  @media screen and (max-width: 300px) {
+    .cardscaler {
+      width: 240px;
+    }
+  }
