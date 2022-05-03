@@ -23,7 +23,6 @@ class Uploader extends Component {
 
 	// On file upload (click the upload button)
 	onFileUpload = () => {
-	
 	// Create an object of formData
 	const formData = new FormData();
 	
@@ -75,8 +74,19 @@ class Uploader extends Component {
                     onlyOnce: true
                   });
                 rows.forEach(function(row){
-                    if(!array.includes(row[4]) & row[1].length() == 2){
-                        writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],row[18])
+                    if(!array.includes(row[4])){
+                        if(row[18] != null & row[18].toString().length == 57){
+                            writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],row[18])
+                        }
+                        else {
+                            var i = 17
+                            while(row[i] != null & row[i].toString().length == 57 & i > 0){
+                                i -= 1
+                            }
+                            if(i != 0){
+                                writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],row[i])
+                            }
+                        }
                         array.push(row[4])
                     }
                 });
@@ -128,12 +138,6 @@ class Uploader extends Component {
 	
 	return (
 		<div>
-			<h1>
-			GeeksforGeeks
-			</h1>
-			<h3>
-			File Upload using React!
-			</h3>
 			<div>
 				<input type="file" onChange={this.onFileChange} />
 				<button onClick={this.onFileUpload}>
