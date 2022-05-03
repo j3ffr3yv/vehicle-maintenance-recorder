@@ -43,7 +43,7 @@ function SignUp() {
     setError('')
     if(validatePassword()) {
       // Create a new user with email and password using firebase
-        createUserWithEmailAndPassword(auth, email, name, password)
+        createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
           writeUserData(name, userCredential.user.uid);
@@ -101,6 +101,7 @@ function SignUp() {
               onChange={(isValid) => {setPasswordValid(isValid)}}
             />
 
+            <h3>Users must reset password to log in</h3>
             <button type='submit' disabled = {!passwordValid}>Sign Up</button>
           </form>
         </div>
