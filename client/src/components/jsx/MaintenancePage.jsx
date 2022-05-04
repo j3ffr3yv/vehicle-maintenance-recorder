@@ -92,11 +92,11 @@ const MaintenancePage = () => {
                             <div>
                                 <h1>Maintenance Data: {maintenanceData.name}</h1>
                                 <div className = "maintenanceDataList">
-                                    <p>{maintenanceData.date}</p>
-                                    <p>{maintenanceData.mechanic}</p>
-                                    <p>{maintenanceData.parts_cost}</p>
-                                    <p>{maintenanceData.labor}</p>
-                                    <p>{maintenanceData.notes}</p>
+                                    <p>Date: {maintenanceData.date}</p>
+                                    <p>Mechanic: {maintenanceData.mechanic}</p>
+                                    <p>Parts Costs: {maintenanceData.parts_cost}</p>
+                                    <p>Labor: {maintenanceData.labor}</p>
+                                    <p>Notes: {maintenanceData.notes}</p>
                                     <button onClick = {handleStartEdit}> edit </button>
                                 </div>
                             </div>
