@@ -162,10 +162,52 @@ function VehiclePage() {
             notes: addMaintenanceData.notes,
             mileage: addMaintenanceData.mileage
         }
+
+        console.log(parseInt(addMaintenanceData.mileage) + " > " + vehicleData.mileageP);
+        console.log(maintenances)
+        if(parseInt(addMaintenanceData.mileage) > vehicleData.mileageP)
+        {
+            console.log("replace")
+            replaceMileage(addMaintenanceData.mileage)
+        }
     
       writeMaintenanceData(newMaintenance);
       const newMaintenances = [...maintenances, newMaintenance];
       setMaintenances(newMaintenances);
+    }
+
+    function replaceMileage(mileage)
+    {
+        const db = getDatabase();
+        set(ref(db, 'vehicles/' + vehicleData.idP), {
+            id: vehicleData.idP,
+            license: vehicleData.licenseP, 
+            state: vehicleData.stateP,
+            vin: vehicleData.vinP, 
+            twf: vehicleData.twfP, 
+            year: vehicleData.yearP, 
+            make: vehicleData.makeP, 
+            model: vehicleData.modelP, 
+            //pur_date: vehicleData.pur_dateP, 
+            mileage: mileage,
+            maintenances: vehicleData.maintenancesP
+        });
+        //vehicleData = vehicle;
+
+        localStorage.setItem("loadedVehicle", JSON.stringify({
+            idP: vehicleData.idP,
+            licenseP: vehicleData.licenseP, 
+            stateP: vehicleData.stateP,
+            vinP: vehicleData.vinP, 
+            twfP: vehicleData.twfP, 
+            yearP: vehicleData.yearP, 
+            makeP: vehicleData.makeP, 
+            modelP: vehicleData.modelP, 
+            pur_dateP: vehicleData.pur_dateP, 
+            mileageP: mileage,
+            maintenancesP: vehicleData.maintenancesP
+        }));
+        //navigate('/')
     }
 
     function handleMaintenancePage(maintenance) {
