@@ -2,6 +2,7 @@ import axios from 'axios';
 import readXlsxFile from 'read-excel-file'
 import { nanoid } from "nanoid";
 import { getDatabase, ref, set, onValue } from "firebase/database";
+import moment from 'moment';
 
 import React,{Component} from 'react';
 
@@ -73,18 +74,36 @@ class Uploader extends Component {
                   }, {
                     onlyOnce: true
                   });
+				const months = {
+				Jan: '01',
+				Feb: '02',
+				Mar: '03',
+				Apr: '04',
+				May: '05',
+				Jun: '06',
+				Jul: '07',
+				Aug: '08',
+				Sep: '09',
+				Oct: '10',
+				Nov: '11',
+				Dec: '12',
+				}
                 rows.forEach(function(row){
                     if(!array.includes(row[4])){
                         if(row[18] != null & row[18].toString().length == 57){
-                            writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],row[18])
-                        }
+							var datetoread = row[18].toString().split(" ");
+							var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3];
+                            writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],datetowrite);
+						}
                         else {
                             var i = 17
                             while(row[i] != null & row[i].toString().length == 57 & i > 0){
                                 i -= 1
                             }
                             if(i != 0){
-                                writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],row[i])
+								var datetoread = row[i].toString().split(" ")
+								var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3]
+                                writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],datetowrite)
                             }
                         }
                         array.push(row[4])
