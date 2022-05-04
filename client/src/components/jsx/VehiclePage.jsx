@@ -86,17 +86,6 @@ function VehiclePage() {
         notes: "",
         mileage: ""
     })
-    //editVehicleData
-    const [editMaintenanceData, setEditMaintenanceData] = useState({
-        id: "",
-        name: "",
-        date: "",
-        mechanic: "",
-        parts_cost: "",
-        labor: "",
-        notes: "",
-        mileage: ""
-    });
     //UseEffect
         useEffect(() => {
         updateMaintenances();
@@ -155,17 +144,78 @@ function VehiclePage() {
         const newMaintenance = {
             id: nanoid(),
             name: addMaintenanceData.name,
-            date: Date.now(),
+            date: addMaintenanceData.date,
             mechanic: addMaintenanceData.mechanic,
             parts_cost: addMaintenanceData.parts_cost,
             labor: addMaintenanceData.labor,
             notes: addMaintenanceData.notes,
             mileage: addMaintenanceData.mileage
         }
+
+        console.log(parseInt(addMaintenanceData.mileage) + " > " + vehicleData.mileageP);
+        console.log(maintenances)
+        if(parseInt(addMaintenanceData.mileage) > vehicleData.mileageP)
+        {
+            console.log("replace")
+            replaceMileage(addMaintenanceData.mileage)
+        }
     
       writeMaintenanceData(newMaintenance);
       const newMaintenances = [...maintenances, newMaintenance];
       setMaintenances(newMaintenances);
+    }
+
+    function replaceMileage(mileage)
+    {
+        const db = getDatabase();
+        if(vehicleData.maintenancesP !== undefined)
+        {
+            set(ref(db, 'vehicles/' + vehicleData.idP), {
+                id: vehicleData.idP,
+                license: vehicleData.licenseP, 
+                state: vehicleData.stateP,
+                vin: vehicleData.vinP, 
+                twf: vehicleData.twfP, 
+                year: vehicleData.yearP, 
+                make: vehicleData.makeP, 
+                model: vehicleData.modelP, 
+                pur_date: vehicleData.pur_dateP, 
+                mileage: mileage,
+                maintenances: vehicleData.maintenancesP
+            });
+        }
+        else
+        {
+            set(ref(db, 'vehicles/' + vehicleData.idP), {
+                id: vehicleData.idP,
+                license: vehicleData.licenseP, 
+                state: vehicleData.stateP,
+                vin: vehicleData.vinP, 
+                twf: vehicleData.twfP, 
+                year: vehicleData.yearP, 
+                make: vehicleData.makeP, 
+                model: vehicleData.modelP, 
+                pur_date: vehicleData.pur_dateP, 
+                mileage: mileage,
+                maintenances: []
+            });
+        }
+        //vehicleData = vehicle;
+
+        localStorage.setItem("loadedVehicle", JSON.stringify({
+            idP: vehicleData.idP,
+            licenseP: vehicleData.licenseP, 
+            stateP: vehicleData.stateP,
+            vinP: vehicleData.vinP, 
+            twfP: vehicleData.twfP, 
+            yearP: vehicleData.yearP, 
+            makeP: vehicleData.makeP, 
+            modelP: vehicleData.modelP, 
+            pur_dateP: vehicleData.pur_dateP, 
+            mileageP: mileage,
+            maintenancesP: vehicleData.maintenancesP
+        }));
+        //navigate('/')
     }
 
     function handleMaintenancePage(maintenance) {
@@ -274,7 +324,7 @@ function VehiclePage() {
                                         <input placeholder = "Year..." defaultValue = {vehicleData.yearP} onChange = {(event) => setEditingData({...editingData, year: event.target.value})}></input>
                                         <input placeholder = "Make..." defaultValue = {vehicleData.makeP} onChange = {(event) => setEditingData({...editingData, make: event.target.value})}></input>
                                         <input placeholder = "Model..." defaultValue = {vehicleData.modelP} onChange = {(event) => setEditingData({...editingData, model: event.target.value})}></input>
-                                        <input placeholder = "Purchase_date..." defaultValue = {vehicleData.pur_dateP} onChange = {(event) => setEditingData({...editingData, pur_date: event.target.value})}></input>
+                                        <input placeholder = "Purchase_date (MM/DD/YYYY)..." defaultValue = {vehicleData.pur_dateP} onChange = {(event) => setEditingData({...editingData, pur_date: event.target.value})}></input>
                                         <input placeholder = "Mileage..." defaultValue = {vehicleData.mileageP} onChange = {(event) => setEditingData({...editingData, mileage: event.target.value})}></input>
                                         <button onClick = {() => handleSubmitEdit(editingData)}>Submit</button>
                                     </div>
@@ -386,7 +436,7 @@ function VehiclePage() {
                                                         notes: currMaint.notes,
                                                         vehicleID: vehicleData.idP
                                                     }
-                                                )}>{Date(currMaint.date)}</Link>
+                                                )}>{currMaint.date}</Link>
                                             </td>
                                             <td>{currMaint.name}</td>
                                             <td>{currMaint.mileage}</td>

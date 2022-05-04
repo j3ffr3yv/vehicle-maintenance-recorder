@@ -13,7 +13,7 @@ const MaintenancePage = () => {
     let maintenanceData = JSON.parse(localStorage.getItem("loadedMaintenance"));
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editingData, setEditingData] = useState({id: maintenanceData.id, name: "", date: null, mechanic: "", parts_cost: "", labor: "", notes: "", vehicleID: maintenanceData.vehicleID});
+    const [editingData, setEditingData] = useState({id: maintenanceData.id, name: "", date: "", mechanic: "", parts_cost: "", labor: "", notes: "", vehicleID: maintenanceData.vehicleID});
 
     function handleDelete()
     {
@@ -92,11 +92,11 @@ const MaintenancePage = () => {
                             <div>
                                 <h1>Maintenance Data: {maintenanceData.name}</h1>
                                 <div className = "maintenanceDataList">
-                                    <p>{maintenanceData.date}</p>
-                                    <p>{maintenanceData.mechanic}</p>
-                                    <p>{maintenanceData.parts_cost}</p>
-                                    <p>{maintenanceData.labor}</p>
-                                    <p>{maintenanceData.notes}</p>
+                                    <p>Date: {maintenanceData.date}</p>
+                                    <p>Mechanic: {maintenanceData.mechanic}</p>
+                                    <p>Parts Costs: {maintenanceData.parts_cost}</p>
+                                    <p>Labor: {maintenanceData.labor}</p>
+                                    <p>Notes: {maintenanceData.notes}</p>
                                     <button onClick = {handleStartEdit}> edit </button>
                                 </div>
                             </div>
