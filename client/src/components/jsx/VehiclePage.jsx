@@ -224,13 +224,16 @@ function VehiclePage() {
     }
 
     function handleDeleteVehicle() {
-        //console.log("DELETING " + vehicleData.idP)
-        const db = getDatabase();
-        remove(ref(db, 'vehicles/' + vehicleData.idP));
-        localStorage.setItem("loadedVehicle", null);
-        vehicleData = null;
-        window.location.href = '/'
-       // window.location.reload(false);
+        if(window.confirm("Delete this vehicle?"))
+        {
+            //console.log("DELETING " + vehicleData.idP)
+            const db = getDatabase();
+            remove(ref(db, 'vehicles/' + vehicleData.idP));
+            localStorage.setItem("loadedVehicle", null);
+            vehicleData = null;
+            window.location.href = '/'
+        // window.location.reload(false);
+        }
     }
 
     function handleStartEditing()
@@ -288,10 +291,20 @@ function VehiclePage() {
 
     return (
          <div>
-             <NavBar/>
-             <Link to="/"> 
+            <NavBar/>
+            <div className = "deleteAndBack">
+                <Link to="/"> 
                 <ArrowBackIosNewSharpIcon />
-            </Link>
+                </Link>
+                {
+                    auth.currentUser != null & vehicleData != null?
+                    <button onClick = {handleDeleteVehicle} style = {{backgroundColor: "transparent", borderwidth: "0px", padding: "0px", shadow: "0px", borderWidth: "0px", height: "30px", width: "30px"}}>
+                        <img src = {require("../../Images/Delete.png")} style = {{height: "30px", width: "30px", margin: "0px"}}/>
+                    </button>
+                    :
+                        null
+                }
+            </div>
             {
                 auth.currentUser != null && vehicleData != null ?
                     <div>

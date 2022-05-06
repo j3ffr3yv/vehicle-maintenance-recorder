@@ -17,13 +17,16 @@ const MaintenancePage = () => {
 
     function handleDelete()
     {
-        console.log("delete");
-        const db = getDatabase();
-        remove(ref(db, 'vehicles/' + maintenanceData.vehicleID + "/maintenances/" + maintenanceData.id))
-        localStorage.setItem("loadedMaintenance", null);
-        maintenanceData = null;
-        window.location.href = "/vehiclepage";
-        console.log("deleted");
+        if(window.confirm("Delete this maintenance update?"))
+        {
+            console.log("delete");
+            const db = getDatabase();
+            remove(ref(db, 'vehicles/' + maintenanceData.vehicleID + "/maintenances/" + maintenanceData.id))
+            localStorage.setItem("loadedMaintenance", null);
+            maintenanceData = null;
+            window.location.href = "/vehiclepage";
+            console.log("deleted");
+        }
     }
 
     useEffect(() => {
@@ -79,15 +82,22 @@ const MaintenancePage = () => {
     return (
         <div>
             <NavBar/>
-            <Link to="/vehiclepage"> 
-                <ArrowBackIosNewSharpIcon />
-            </Link>
+            <div className = "deleteAndBack">
+                <Link to="/vehiclepage"> 
+                    <ArrowBackIosNewSharpIcon />
+                </Link>
+                {
+                    auth.currentUser != null & maintenanceData != null?
+                    <button onClick = {handleDelete} style = {{backgroundColor: "transparent", borderwidth: "0px", padding: "0px", shadow: "0px", borderWidth: "0px", height: "30px", width: "30px"}}>
+                        <img src = {require("../../Images/Delete.png")} style = {{height: "30px", width: "30px", margin: "0px"}}/>
+                    </button>
+                    :
+                        null
+                }
+            </div>
             { 
                 auth.currentUser != null & maintenanceData != null?
                     <div>
-                        <button onClick = {handleDelete}>
-                            delete
-                        </button>
                         {isEditing == false ? 
                             <div>
                                 <h1>Maintenance Data: {maintenanceData.name}</h1>

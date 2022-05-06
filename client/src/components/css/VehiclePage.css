@@ -45,3 +45,10 @@
 }
 
 tr:hover {background-color: rgb(82,178,207)}
+
+.deleteAndBack {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px
+}
