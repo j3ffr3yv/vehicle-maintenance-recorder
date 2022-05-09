@@ -78,6 +78,23 @@ const MaintenancePage = () => {
 
         setIsEditing(false);
     }
+    
+    function handleCancelEdit()
+    {
+        setEditingData(
+            {
+                id: maintenanceData.id, 
+                name: "", 
+                date: "", 
+                mechanic: "", 
+                parts_cost: "", 
+                labor: "", 
+                notes: "", 
+                vehicleID: maintenanceData.vehicleID
+            }
+        )
+        setIsEditing(false);
+    }
 
     return (
         <div>
@@ -114,13 +131,22 @@ const MaintenancePage = () => {
                             <div>
                                 <h1>Editing Maintenance Data...</h1>
                                 <div className = "maintenanceDataList">
-                                <input placeholder = "Name..." defaultValue = {maintenanceData.name} onChange = {(event) => setEditingData({...editingData, name: event.target.value})}></input>
+                                    <div style = {{fontSize: "15px"}}>Name</div>
+                                    <input placeholder = "Name..." defaultValue = {maintenanceData.name} onChange = {(event) => setEditingData({...editingData, name: event.target.value})}></input>
+                                    <div style = {{fontSize: "15px"}}>Date</div>
                                     <input placeholder = "Date..." defaultValue = {maintenanceData.date} onChange = {(event) => setEditingData({...editingData, date: event.target.value})}></input>
+                                    <div style = {{fontSize: "15px"}}>Mechanic</div>
                                     <input placeholder = "Mechanic..." defaultValue = {maintenanceData.mechanic} onChange = {(event) => setEditingData({...editingData, mechanic: event.target.value})}></input>
+                                    <div style = {{fontSize: "15px"}}>Cost of Parts</div>
                                     <input placeholder = "Cost of Parts..." defaultValue = {maintenanceData.parts_cost} onChange = {(event) => setEditingData({...editingData, parts_cost: event.target.value})}></input>
+                                    <div style = {{fontSize: "15px"}}>Labor hours</div>
                                     <input placeholder = "Labor hours..." defaultValue = {maintenanceData.labor} onChange = {(event) => setEditingData({...editingData, labor: event.target.value})}></input>
+                                    <div style = {{fontSize: "15px"}}>Notes</div>
                                     <input placeholder = "Notes..." defaultValue = {maintenanceData.notes} onChange = {(event) => setEditingData({...editingData, notes: event.target.value})}></input>
-                                    <button onClick = {() => handleSubmit(editingData)}> submit </button>
+                                    <div style = {{display: "flex", justifyContent: "space-between", marginTop: "10px"}}>
+                                        <button onClick = {handleCancelEdit}> cancel </button>
+                                        <button onClick = {() => handleSubmit(editingData)}> submit </button>
+                                    </div>
                                 </div>
                             </div>
                         }

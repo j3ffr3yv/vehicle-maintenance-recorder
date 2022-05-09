@@ -30,7 +30,11 @@ function VehiclePage() {
     //Modal
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => 
+    {
+        handleCancelEdit();
+        setShow(true);
+    }
     
     useEffect(() => {
         if (vehicleData == null)
@@ -162,7 +166,9 @@ function VehiclePage() {
     
       writeMaintenanceData(newMaintenance);
       const newMaintenances = [...maintenances, newMaintenance];
-      setMaintenances(newMaintenances);
+      //setMaintenances(newMaintenances);
+      maintenance();
+      handleClose(event);
     }
 
     function replaceMileage(mileage)
@@ -219,6 +225,7 @@ function VehiclePage() {
     }
 
     function handleMaintenancePage(maintenance) {
+        handleCancelEdit();
         localStorage.setItem("loadedMaintenance", JSON.stringify(maintenance))
         //console.log("MAINTENANCE TO PAGE: " + localStorage.getItem("loadedMaintenance"));
     }
@@ -231,6 +238,7 @@ function VehiclePage() {
             remove(ref(db, 'vehicles/' + vehicleData.idP));
             localStorage.setItem("loadedVehicle", null);
             vehicleData = null;
+            handleCancelEdit();
             window.location.href = '/'
         // window.location.reload(false);
         }
@@ -289,6 +297,26 @@ function VehiclePage() {
         
     }
 
+    function handleCancelEdit()
+    {
+        setEditingData(
+            {
+                id: vehicleData.idP, 
+                state: "", license: 
+                vehicleData.licenseP, 
+                vin: "", 
+                twf: "", 
+                year: "", 
+                make: "", 
+                model: "", 
+                pur_date: "", 
+                mileage: "", 
+                maintenances: []
+            }
+        )
+        setIsEditing(false);
+    }
+
     return (
          <div>
             <NavBar/>
@@ -308,10 +336,6 @@ function VehiclePage() {
             {
                 auth.currentUser != null && vehicleData != null ?
                     <div>
-                        <button onClick={handleDeleteVehicle}>
-                            Delete
-                        </button>
-
                         {isEditing == false ? 
                                 <div>
                                     <h1>Vehicle Data: {vehicleData.twfP}</h1>
@@ -331,15 +355,26 @@ function VehiclePage() {
                                 <div>
                                     <h1>Editing Vehicle Data...</h1>
                                     <div className = "vehicleDataList">
+                                        <div style = {{fontSize: "15px"}}>License</div>
                                         <input placeholder = "State..." defaultValue = {vehicleData.stateP} onChange = {(event) => setEditingData({...editingData, state: event.target.value})}></input>
+                                        <div style = {{fontSize: "15px"}}>VIN</div>
                                         <input placeholder = "VIN..." defaultValue = {vehicleData.vinP} onChange = {(event) => setEditingData({...editingData, vin: event.target.value})}></input>
+                                        <div style = {{fontSize: "15px"}}>TWF</div>
                                         <input placeholder = "TWF..." defaultValue = {vehicleData.twfP} onChange = {(event) => setEditingData({...editingData, twf: event.target.value})}></input>
+                                        <div style = {{fontSize: "15px"}}>Year</div>
                                         <input placeholder = "Year..." defaultValue = {vehicleData.yearP} onChange = {(event) => setEditingData({...editingData, year: event.target.value})}></input>
+                                        <div style = {{fontSize: "15px"}}>Make</div>
                                         <input placeholder = "Make..." defaultValue = {vehicleData.makeP} onChange = {(event) => setEditingData({...editingData, make: event.target.value})}></input>
+                                        <div style = {{fontSize: "15px"}}>Model</div>
                                         <input placeholder = "Model..." defaultValue = {vehicleData.modelP} onChange = {(event) => setEditingData({...editingData, model: event.target.value})}></input>
+                                        <div style = {{fontSize: "15px"}}>Purchase Date</div>
                                         <input placeholder = "Purchase_date (MM/DD/YYYY)..." defaultValue = {vehicleData.pur_dateP} onChange = {(event) => setEditingData({...editingData, pur_date: event.target.value})}></input>
+                                        <div style = {{fontSize: "15px"}}>Mileage</div>
                                         <input placeholder = "Mileage..." defaultValue = {vehicleData.mileageP} onChange = {(event) => setEditingData({...editingData, mileage: event.target.value})}></input>
-                                        <button onClick = {() => handleSubmitEdit(editingData)}>Submit</button>
+                                        <div style = {{display: "flex", justifyContent: "space-between", marginTop: "10px"}}>
+                                            <button onClick = {handleCancelEdit}>Cancel</button>
+                                            <button onClick = {() => handleSubmitEdit(editingData)}>Submit</button>
+                                        </div>
                                     </div>
                                 </div>
                         }
@@ -351,13 +386,14 @@ function VehiclePage() {
                             backdrop="static"
                             keyboard={false}
                         >
-                            <Modal.Header closeButton>
-                            <Modal.Title>Adding Maintenance</Modal.Title>
+                            <Modal.Header>
+                                <Modal.Title>Adding Maintenance</Modal.Title>
+                                <Button onClick={handleClose}>X</Button>
                             </Modal.Header>
                             <Modal.Body>
-                                <form onSubmit={handleAddMaintenanceSubmit} >
+                                <form onSubmit={handleAddMaintenanceSubmit} style = {{display: "block"}} >
                                     <input
-                                    className = "inputAdd"
+                                    className = "inputAddM"
                                     type="text"
                                     name="name"
                                     required="required"
@@ -365,7 +401,7 @@ function VehiclePage() {
                                     onChange={handleAddMaintenanceChange}
                                     />
                                     <input
-                                    className = "inputAdd"
+                                    className = "inputAddM"
                                     type="text"
                                     name="mechanic"
                                     defaultValue=""
@@ -373,7 +409,7 @@ function VehiclePage() {
                                     onChange={handleAddMaintenanceChange}
                                     />
                                     <input
-                                    className = "inputAdd"
+                                    className = "inputAddM"
                                     type="text"
                                     name="parts_cost"
                                     required="required"
@@ -381,7 +417,7 @@ function VehiclePage() {
                                     onChange={handleAddMaintenanceChange}
                                     />
                                     <input
-                                    className = "inputAdd"
+                                    className = "inputAddM"
                                     type="text"
                                     name="labor"
                                     required="required"
@@ -389,7 +425,7 @@ function VehiclePage() {
                                     onChange={handleAddMaintenanceChange}
                                     />
                                     <input
-                                    className = "inputAdd"
+                                    className = "inputAddM"
                                     type="text"
                                     name="notes"
                                     required="required"
@@ -397,7 +433,7 @@ function VehiclePage() {
                                     onChange={handleAddMaintenanceChange}
                                     />
                                     <input
-                                    className = "inputAdd"
+                                    className = "inputAddM"
                                     type="text"
                                     name="date"
                                     required="required"
@@ -405,7 +441,7 @@ function VehiclePage() {
                                     onChange={handleAddMaintenanceChange}
                                     />
                                     <input
-                                    className = "inputAdd"
+                                    className = "inputAddM"
                                     type="text"
                                     name="mileage"
                                     required="required"
@@ -415,12 +451,6 @@ function VehiclePage() {
                                     <button type="submit">Add</button>
                                 </form>
                             </Modal.Body>
-                            <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                                Close
-                            </Button>
-                            <Button variant="primary">Understood</Button>
-                            </Modal.Footer>
                         </Modal>
 
                         </div>
@@ -458,9 +488,10 @@ function VehiclePage() {
                                 })}
                             </tbody>
                         </table>
-                        <IconButton aria-label="delete"> 
-                        <AddSharpIcon onClick={handleShow} />
+                        <IconButton aria-label="delete" onClick={handleShow}> 
+                            <AddSharpIcon/>
                         </IconButton>
+                        {/*<button onClick = {() => maintenance()}>If table is showing duplicates, click here</button>*/}
                     </div>
                 : 
                     <h1>Please log in in order to view this information!</h1>

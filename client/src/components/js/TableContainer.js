@@ -79,13 +79,13 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
                 <tr>
                   {row.cells.map((cell) => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      <td {...cell.getCellProps()} style = {{overflow: "hidden"}}>{cell.render('Cell')}</td>
                     );
                   })}
                 </tr>
                 {row.isExpanded && (
                   <tr>
-                    <td colSpan={visibleColumns.length}>
+                    <td colSpan={visibleColumns.length} style = {{overflow: "hidden"}}>
                       {renderRowSubComponent(row)}
                     </td>
                   </tr>

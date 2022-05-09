@@ -17,6 +17,9 @@ import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { getAuth } from "firebase/auth"
 import NavBar from "./NavBar"
+import AddSharpIcon from '@mui/icons-material/AddSharp';
+import ArrowBackIosNewSharpIcon from '@mui/icons-material/ArrowBackIosNewSharp';
+import IconButton from '@mui/material/IconButton';
 
 import Modal from 'react-bootstrap/Modal'
 import { Button } from 'react-bootstrap';
@@ -144,7 +147,7 @@ const Home = () => {
     //const newVehicles = [...vehicles, newVehicle];
     console.log(vehicles);
     updateVehicles();
-    addVehicleData.setState({
+    setAddVehicleData({
       license: '', 
       state: '',
       vin: '', 
@@ -155,6 +158,7 @@ const Home = () => {
       pur_date: '', 
       mileage: ''
     })
+    uponModalClose(event);
   }
   
   function vehicleInfoPage(vehicleInfo) {
@@ -219,10 +223,6 @@ const Home = () => {
   const columns = useMemo(
     () => [
       {
-        Header: () => 
-        <Button variant="primary" onClick={handleShow} justifyContent='center'>
-          Add +
-        </Button>,
         id: 'expander', // 'id' is required
         Cell: ({ row }) => (
           <span {...row.getToggleRowExpandedProps()}>
@@ -251,7 +251,7 @@ const Home = () => {
   );
 
   return (
-    <div>
+    <div style = {{height: "100%"}}>
       <NavBar/>
       {
         auth.currentUser != null ?
@@ -259,102 +259,102 @@ const Home = () => {
           <Container style={{ marginTop: 0 }}>
           {console.log("Rendering")}
           <div>
+              <IconButton aria-label="delete" onClick={handleShow}> 
+                <AddSharpIcon/>
+              </IconButton>
               <Modal
                 show={show}
                 onHide={uponModalClose}
                 backdrop="static"
                 keyboard={false}
               >
-                <Modal.Header closeButton>
+                <Modal.Header>
                   <Modal.Title>Adding Vehicle</Modal.Title>
+                  <Button onClick={uponModalClose}>X</Button>
                 </Modal.Header>
                 <Modal.Body>
 
                     <h2>Add a Vehicle</h2>
-                  <form onSubmit={handleAddVehicleSubmit}>
-                      <input
-                      className = "inputAdd"
-                      type="text"
-                      name="license"
-                      required="required"
-                      placeholder="License: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      className = "inputAdd"
-                      type="text"
-                      name="state"
-                      required="required"
-                      placeholder="State: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      className = "inputAdd"
-                      type="text"
-                      name="vin"
-                      required="required"
-                      placeholder="Vin: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      className = "inputAdd"
-                      type="text"
-                      name="twf"
-                      required="required"
-                      placeholder="Twf: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      className = "inputAdd"
-                      type="text"
-                      name="year"
-                      required="required"
-                      placeholder="Year: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      className = "inputAdd"
-                      type="text"
-                      name="make"
-                      required="required"
-                      placeholder="Make: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      className = "inputAdd"
-                      type="text"
-                      name="model"
-                      required="required"
-                      placeholder="Model: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      type="text"
-                      className = "inputAdd"
-                      name="pur_date"
-                      required="required"
-                      placeholder="Pur_date: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <input
-                      type="text"
-                      className = "inputAdd"
-                      name="mileage"
-                      required="required"
-                      placeholder="Mileage: "
-                      onChange={handleAddVehicleChange}
-                      />
-                      <button type="submit">Add</button>
-                  </form>
+                  <div >
+                    <form onSubmit={handleAddVehicleSubmit} style = {{display: "block"}}>
+                        <input
+                        className = "inputAdd"
+                        type="text"
+                        name="license"
+                        required="required"
+                        placeholder="License: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        className = "inputAdd"
+                        type="text"
+                        name="state"
+                        required="required"
+                        placeholder="State: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        className = "inputAdd"
+                        type="text"
+                        name="vin"
+                        required="required"
+                        placeholder="Vin: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        className = "inputAdd"
+                        type="text"
+                        name="twf"
+                        required="required"
+                        placeholder="Twf: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        className = "inputAdd"
+                        type="text"
+                        name="year"
+                        required="required"
+                        placeholder="Year: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        className = "inputAdd"
+                        type="text"
+                        name="make"
+                        required="required"
+                        placeholder="Make: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        className = "inputAdd"
+                        type="text"
+                        name="model"
+                        required="required"
+                        placeholder="Model: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        type="text"
+                        className = "inputAdd"
+                        name="pur_date"
+                        required="required"
+                        placeholder="Pur_date: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <input
+                        type="text"
+                        className = "inputAdd"
+                        name="mileage"
+                        required="required"
+                        placeholder="Mileage: "
+                        onChange={handleAddVehicleChange}
+                        />
+                        <button type="submit" style = {{marginTop: "10px"}}>Add</button>
+                    </form>
+                  </div>
                   <h2>Or, upload excel document</h2>
                   <Uploader></Uploader>
                 </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={uponModalClose}>
-                    Close
-                  </Button>
-                  <Button variant="primary">Understood</Button>
-                </Modal.Footer>
               </Modal>
           </div>
           <TableContainer

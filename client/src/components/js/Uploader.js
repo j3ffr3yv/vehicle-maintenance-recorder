@@ -27,11 +27,14 @@ class Uploader extends Component {
 	// Create an object of formData
 	const formData = new FormData();
 	
-	const writeVehicleData = (vlicense, vstate, vvin, vtwf, vyear, vmake, vmodel, vpur_date) => {
+	const writeVehicleData = (vid, vlicense, vstate, vvin, vtwf, vyear, vmake, vmodel, vpur_date, vmileage) => {
         const db = getDatabase();
-        const vid = nanoid();
-        set(ref(db, 'vehicles/' + vid), {
-        id: vid,
+		var Vid = vid
+		if (vid == null){
+			Vid = nanoid();
+		}
+        set(ref(db, 'vehicles/' + Vid), {
+        id: Vid,
         license: vlicense, 
         state: vstate,
         vin: vvin, 
@@ -40,8 +43,7 @@ class Uploader extends Component {
         make: vmake, 
         model: vmodel, 
         pur_date: vpur_date, 
-        mileage: 0,
-        maintenances: []
+        mileage: vmileage
         });
     }
     
@@ -65,11 +67,13 @@ class Uploader extends Component {
                 const db = getDatabase();
                 const dbRef = ref(db, 'vehicles');
                 var array = [];
+				var ids = [];
                 onValue(dbRef, (snapshot) => {
                     snapshot.forEach((childSnapshot) => {
                       var vehicleTWF = childSnapshot.val().twf;
+                      var vehicleID = childSnapshot.val().id;
                       array.push(vehicleTWF)
-                      console.log("vehiclewtf " + vehicleTWF)
+					  ids.push(vehicleID)
                     });
                   }, {
                     onlyOnce: true
@@ -88,26 +92,65 @@ class Uploader extends Component {
 				Nov: '11',
 				Dec: '12',
 				}
+				var mileager = false;
+				if(rows[0][rows[0].length-1] == "MILEAGE"){
+					mileager = true;
+				}
                 rows.forEach(function(row){
-                    if(!array.includes(row[4])){
-                        if(row[18] != null & row[18].toString().length == 57){
-							var datetoread = row[18].toString().split(" ");
-							var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3];
-                            writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],datetowrite);
+                    var location = array.indexOf(row[4])
+					var currId = "";
+					if(location == -1){
+						currId = null
+					}
+					else {
+						currId = ids[location]
+					}
+					if(row[18] != null & row[18].toString().length == 57){
+						var datetoread = row[18].toString().split(" ");
+						var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3];
+						var mileagertowrite = 0;
+						if(mileager){
+							mileagertowrite = row[row.length - 1];
 						}
-                        else {
-                            var i = 17
-                            while(row[i] != null & row[i].toString().length == 57 & i > 0){
-                                i -= 1
-                            }
-                            if(i != 0){
-								var datetoread = row[i].toString().split(" ")
-								var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3]
-                                writeVehicleData(row[0], row[1], row[2], row[4], row[8], row[9], row[10],datetowrite)
-                            }
-                        }
-                        array.push(row[4])
-                    }
+						writeVehicleData(
+							ids[location],
+							row[0], 
+							row[1], 
+							row[2], 
+							row[4], 
+							row[8], 
+							row[9], 
+							row[10],
+							datetowrite,
+							mileagertowrite
+							);
+					}
+					else {
+						var i = 17
+						while(row[i] != null & row[i].toString().length == 57 & i > 0){
+							i -= 1
+						}
+						if(i != 0){
+							var datetoread = row[i].toString().split(" ")
+							var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3]
+							var mileagertowrite = 0;
+							if(mileager){
+								mileagertowrite = row[row.length - 1];
+							}
+							writeVehicleData(
+								ids[location],
+								row[0], 
+								row[1], 
+								row[2], 
+								row[4], 
+								row[8], 
+								row[9], 
+								row[10],
+								datetowrite,
+								mileagertowrite
+								);
+						}
+					}
                 });
             })
             
