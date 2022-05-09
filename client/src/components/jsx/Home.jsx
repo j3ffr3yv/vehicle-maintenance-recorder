@@ -156,7 +156,12 @@ const Home = () => {
               "END": "-",
               "DEP": "-",
               "time": "-",
-              "total time": "-"
+              "total time": "-",
+              "FORD": "-",
+              "ALLY": "-",
+              "BANK": "-",
+              "EQUITY": "-",
+              "MILEAGE": curVehicle.mileage
             }
             console.log(vehicleToJson)
             toSetJson.push(vehicleToJson);
