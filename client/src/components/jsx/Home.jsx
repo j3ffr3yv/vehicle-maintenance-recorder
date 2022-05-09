@@ -319,7 +319,7 @@ const Home = () => {
           <Container style={{ marginTop: 0 }}>
           {console.log("Rendering")}
           <div>
-              <IconButton aria-label="delete" onClick={handleShow}> 
+              <IconButton aria-label="delete" onClick={handleShow1}> 
                 <AddSharpIcon/>
               </IconButton>
               <Modal
