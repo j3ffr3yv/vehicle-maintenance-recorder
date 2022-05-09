@@ -18,9 +18,10 @@ function NavBar(){
     
 
     return (
-        <div className = 'mainNavBarContent'>
+        <div className = 'mainNavBarContent' style = {{display: "flex", justifyContent: "space-between"}}>
           <img className='logoImage' src={require("../../Images/Logo.png")}/>
           <div className='navButtons'>
+            <Link to = "/" className='NavBarText'>Home</Link>
               {
                   auth.currentUser != null ? 
                       <Simple></Simple>
@@ -66,19 +67,19 @@ class Simple extends React.Component {
           
     }
       return (
-          <div className = "navbarDropdown">
-          <button className = 'dropdownItem' onClick={LogOut}>
-            Logout
-          </button>
-          <div className = "navButtons">
-            {
-              masterCheck() != true ?
-              <Link to = "/signup">|Sign Up Users</Link>
-              :
-              <Link to = "/"></Link>
-            }
-          </div>
-          <Link to = "/">Home</Link>
+          <div style = {{display: "block"}}>
+            <div className = "navButtons" style = {{display: "block"}}>
+              {
+                masterCheck() != true ?
+                <Link to = "/signup" className='NavBarText' style = {{display: "block"}}>Sign Up Users</Link>
+                :
+                //<Link to = "/" className='NavBarText' style = {{display: "block"}}></Link>
+                null
+              }
+              <Link to = "/" onClick={LogOut} className='NavBarText' style = {{display: "block"}}>
+                Logout
+              </Link>
+            </div>
           </div>
       )
     }
