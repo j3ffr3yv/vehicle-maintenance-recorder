@@ -25,15 +25,22 @@ import Modal from 'react-bootstrap/Modal'
 import { Button } from 'react-bootstrap';
 
 import Uploader from '../js/Uploader.js';
+import { JsonToExcel } from "react-json-to-excel";
+
+import {BrowserView, isBrowser} from 'react-device-detect'
 
 const Home = () => {
 
   const auth = getAuth();
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-  //Modal
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  //Modal Import
+  const [show1, setShow1] = useState(false);
+  const handleClose1 = () => setShow1(false);
+  const handleShow1 = () => setShow1(true);
+  //Modal Export
+  const [show2, setShow2] = useState(false);
+  const handleClose2 = () => setShow2(false);
+  const handleShow2 = () => setShow2(true);
 
   //Vehicles
   const [vehicles, setVehicles] = useState([]);
@@ -64,6 +71,9 @@ const Home = () => {
   //editVehicleID and Dependency
   const [editVehicleID, setEditVehicleID] = useState(null);
   const [dependency, setDependency] = useState(true);
+  //Export
+  const [toJson, setJson] = useState([]);
+
   //UseEffect
     useEffect(() => {
       updateVehicles();
@@ -112,7 +122,57 @@ const Home = () => {
   const uponModalClose = (event) => {
     event.preventDefault();
     updateVehicles();
-    handleClose();
+    handleClose1();
+  }
+  const uponModalOpen = (event) => {
+    event.preventDefault();
+    const db = getDatabase();
+    const starCountRef = ref(db, 'vehicles/');
+
+    onValue(starCountRef, (snapshot) => {
+        let data = snapshot.val();
+        setJson([])
+        var toSetJson = [];
+        if (data != null)
+        {
+          Object.values(data).map((curVehicle, k) => {
+            var vehicleToJson = {
+              "LICENSE": curVehicle.license,
+              "STATE": curVehicle.state,
+              "VIN": curVehicle.vin,
+              "Reg": "-",
+              "TWF": curVehicle.twf,
+              "TP": "-",
+              "TWF#": curVehicle.twf.substring(1),
+              "G": "-",
+              "YEAR": curVehicle.year,
+              "MAKE": curVehicle.make,
+              "MODEL": curVehicle.model,
+              "GVW": "-",
+              "Use": "-",
+              "COST": "-",
+              "PMTS": "-",
+              "METH": "-",
+              "LEN": "-",
+              "TITLE": "-",
+              "PUR DATE": curVehicle.pur_date,
+              "END": "-",
+              "DEP": "-",
+              "time": "-",
+              "total time": "-",
+              "FORD": "-",
+              "ALLY": "-",
+              "BANK": "-",
+              "EQUITY": "-",
+              "MILEAGE": curVehicle.mileage
+            }
+            console.log(vehicleToJson)
+            toSetJson.push(vehicleToJson);
+          })
+        }
+        setJson(toSetJson)
+    });
+    handleShow2();
   }
   const handleAddVehicleChange = (event) => {
       event.preventDefault();
@@ -263,7 +323,7 @@ const Home = () => {
                 <AddSharpIcon/>
               </IconButton>
               <Modal
-                show={show}
+                show={show1}
                 onHide={uponModalClose}
                 backdrop="static"
                 keyboard={false}
@@ -362,6 +422,33 @@ const Home = () => {
           data={vehicles}
           renderRowSubComponent={renderRowSubComponent}
           />
+          <BrowserView>
+            <Button variant="primary" onClick={uponModalOpen} justifyContent='center'>
+              EXPORT
+            </Button>
+              <Modal
+                show={show2}
+                onHide={handleClose2}
+                backdrop="static"
+                keyboard={false}
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Exporting Data</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <JsonToExcel
+                  title="Download as Excel"
+                  data={toJson}
+                  fileName="dmv"
+                  />
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleClose2}>
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+          </BrowserView>
           </Container>
         :
           <h1>Please log in in order to view this information!</h1>
