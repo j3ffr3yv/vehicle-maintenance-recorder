@@ -413,7 +413,6 @@ const Home = () => {
                   <Button variant="secondary" onClick={uponModalClose}>
                     Close
                   </Button>
-                  <Button variant="primary">Understood</Button>
                 </Modal.Footer>
               </Modal>
           </div>
@@ -446,7 +445,6 @@ const Home = () => {
                   <Button variant="secondary" onClick={handleClose2}>
                     Close
                   </Button>
-                  <Button variant="primary">Understood</Button>
                 </Modal.Footer>
               </Modal>
           </BrowserView>
