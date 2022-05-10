@@ -17,4 +17,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_APPLICATION_DATABASE_TEST }}'
           channelId: live
-          projectId: my-application-database-test
+          projectId: Tworld-Foods-Vehicle-Maintenance
