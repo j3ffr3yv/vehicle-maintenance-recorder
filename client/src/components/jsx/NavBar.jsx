@@ -69,6 +69,7 @@ class Simple extends React.Component {
       return (
           <div style = {{display: "block"}}>
             <div className = "navButtons" style = {{display: "block"}}>
+              <p className = "NavBarText" style = {{marginBottom: "0px"}}>{auth.currentUser.email}</p>
               {
                 masterCheck() != true ?
                 <Link to = "/signup" className='NavBarText' style = {{display: "block"}}>Sign Up Users</Link>

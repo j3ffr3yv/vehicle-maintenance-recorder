@@ -16,6 +16,7 @@
 .navButtons {  
     font-size: 20px;
     color: rgb(255, 255, 255);
+    text-align: right;
 }
 
 .NavBarText {
