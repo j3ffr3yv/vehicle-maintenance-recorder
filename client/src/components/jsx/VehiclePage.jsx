@@ -237,8 +237,8 @@ function VehiclePage() {
             const db = getDatabase();
             remove(ref(db, 'vehicles/' + vehicleData.idP));
             localStorage.setItem("loadedVehicle", null);
-            vehicleData = null;
             handleCancelEdit();
+            vehicleData = null;
             window.location.href = '/'
         // window.location.reload(false);
         }
