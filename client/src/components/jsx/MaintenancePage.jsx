@@ -24,7 +24,7 @@ const MaintenancePage = () => {
             remove(ref(db, 'vehicles/' + maintenanceData.vehicleID + "/maintenances/" + maintenanceData.id))
             localStorage.setItem("loadedMaintenance", null);
             maintenanceData = null;
-            window.location.href = "/vehiclePage";
+            window.location.href = "/VehiclePage";
             console.log("deleted");
         }
     }
