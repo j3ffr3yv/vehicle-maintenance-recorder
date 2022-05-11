@@ -33,12 +33,10 @@ function Login() {
     e.preventDefault()
     sendPasswordResetEmail(auth, email)
   .then(() => {
-    alert.show("Password Reset Email Sent!")
     // Password reset email sent!
     // ..
   })
   .catch((error) => {
-    alert.show("ERROR: Invalid Info!")
     const errorCode = error.code;
     const errorMessage = error.message;
     // ..
