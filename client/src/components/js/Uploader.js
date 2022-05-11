@@ -96,7 +96,7 @@ class Uploader extends Component {
 				if(rows[0][rows[0].length-1] == "MILEAGE"){
 					mileager = true;
 				}
-                rows.forEach(function(row){
+                rows.slice(1).forEach(function(row){
                     var location = array.indexOf(row[4])
 					var currId = "";
 					if(location == -1){
@@ -107,7 +107,7 @@ class Uploader extends Component {
 					}
 					if(row[18] != null & row[18].toString().length == 57){
 						var datetoread = row[18].toString().split(" ");
-						var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3];
+						var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3].substring(2);
 						var mileagertowrite = 0;
 						if(mileager){
 							mileagertowrite = row[row.length - 1];
@@ -125,14 +125,34 @@ class Uploader extends Component {
 							mileagertowrite
 							);
 					}
-					else {
+					else if(row[18] != null & row[18].toString().length == 8){
+						var mileagertowrite = 0;
+						if(mileager){
+							mileagertowrite = row[row.length - 1];
+						}
+						writeVehicleData(
+							ids[location],
+							row[0], 
+							row[1], 
+							row[2], 
+							row[4], 
+							row[8], 
+							row[9], 
+							row[10],
+							row[18],
+							mileagertowrite
+							);
+					}
+					else{
 						var i = 17
 						while(row[i] != null & row[i].toString().length == 57 & i > 0){
 							i -= 1
 						}
 						if(i != 0){
+							console.log(row[i])
 							var datetoread = row[i].toString().split(" ")
-							var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3]
+							console.log(datetoread)
+							var datetowrite = datetoread[2] + "/" + months[datetoread[1]] + "/" + datetoread[3].substring(2);
 							var mileagertowrite = 0;
 							if(mileager){
 								mileagertowrite = row[row.length - 1];
@@ -177,12 +197,6 @@ class Uploader extends Component {
 
 			
 <p>File Type: {this.state.selectedFile.type}</p>
-
-			
-<p>
-			Last Modified:{" "}
-			{this.state.selectedFile.lastModifiedDate.toDateString()}
-			</p>
 
 		</div>
 		);
