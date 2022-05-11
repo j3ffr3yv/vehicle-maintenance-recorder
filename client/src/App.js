@@ -23,7 +23,7 @@ import {getDatabase, ref, set} from "firebase/database";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAxCd71aKYWvP88iVGhGfj8nKHGU3PD12c",
-  authDomain: "my-application-database-test.firebaseapp.com",
+  authDomain: "worldfoodsvehicleDB.firebaseapp.com",
   databaseURL: "https://my-application-database-test-default-rtdb.firebaseio.com",
   projectId: "worldfoodsvehicleDB",
   storageBucket: "worldfoodsvehicleDB.appspot.com",
